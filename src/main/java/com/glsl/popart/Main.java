@@ -6,7 +6,13 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.swing.*;
 
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+import java.io.InputStream;
+
 public class Main implements GLEventListener {
+
+    Texture texture;
 
     public static void main(String[] args) {
         // OpenGL-Profil abrufen
@@ -33,7 +39,16 @@ public class Main implements GLEventListener {
     // Wird aufgerufen, wenn das Rendering gestartet wird
     @Override
     public void init(GLAutoDrawable drawable) {
-        System.out.println("Hello OpenGL! Fenster ist bereit.");
+        try {
+            InputStream stream = getClass().getResourceAsStream("/textures/horse.jpg");
+            if (stream == null) {
+                System.err.println("Bild nicht gefunden!");
+                return;
+            }
+            texture = TextureIO.newTexture(stream, false, "jpg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Wird bei Fenster-Resize aufgerufen
@@ -42,7 +57,25 @@ public class Main implements GLEventListener {
 
     // Zeichnen pro Frame
     @Override
-    public void display(GLAutoDrawable drawable) {}
+    public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+
+        // Textur binden
+        if (texture != null) {
+            texture.enable(gl);
+            texture.bind(gl);
+        }
+
+        // Quad zeichnen (z. B. mit 2 Dreiecken oder GL_QUADS)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex2f(-1f, -1f);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex2f(1f, -1f);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex2f(1f, 1f);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex2f(-1f, 1f);
+        gl.glEnd();
+    }
 
     // Cleanup, wenn Fenster geschlossen wird
     @Override
