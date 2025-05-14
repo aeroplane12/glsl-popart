@@ -95,7 +95,7 @@ public class Main implements GLEventListener {
         checkGLError(gl, "glUseProgram");
 
         // Uniform setzen
-        float levels = 5.0f; // Anzahl der gewünschten Farbstufen
+        float levels = 3.0f; // Anzahl der gewünschten Farbstufen
         int uLevels = gl.glGetUniformLocation(shaderProgram, "u_levels");
         gl.glUniform1f(uLevels, levels);
         checkGLError(gl, "setting u_levels");
