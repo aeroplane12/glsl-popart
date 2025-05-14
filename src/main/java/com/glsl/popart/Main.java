@@ -6,10 +6,12 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.swing.*;
 
+
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import java.io.InputStream;
 
+import static com.glsl.popart.utils.GLDebugUtils.checkGLError;
 import static com.glsl.popart.utils.ShaderUtils.*;
 import static com.glsl.popart.utils.TextureUtils.loadTexture;
 
@@ -51,14 +53,16 @@ public class Main implements GLEventListener {
             String vertexSource = loadShaderSource("/shaders/posterization.vert");
             String fragmentSource = loadShaderSource("/shaders/posterization.frag");
 
+            System.out.println("Vertex Shader Source:\n" + vertexSource);
+            System.out.println("Fragment Shader Source:\n" + fragmentSource);
+            checkGLError(gl, "loading shader sources");
+
             int vertexShader = compileShader(gl, GL2.GL_VERTEX_SHADER, vertexSource);
             int fragmentShader = compileShader(gl, GL2.GL_FRAGMENT_SHADER, fragmentSource);
+            checkGLError(gl, "compiling shaders");
 
             shaderProgram = linkProgram(gl, vertexShader, fragmentShader);
-            gl.glAttachShader(shaderProgram, vertexShader);
-            gl.glAttachShader(shaderProgram, fragmentShader);
-            gl.glLinkProgram(shaderProgram);
-
+            checkGLError(gl, "linking program");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,13 +88,17 @@ public class Main implements GLEventListener {
         GL2 gl = drawable.getGL().getGL2();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        checkGLError(gl, "glClear");
 
         // Shader verwenden
         gl.glUseProgram(shaderProgram);
+        checkGLError(gl, "glUseProgram");
 
         // Uniform setzen
+        float levels = 5.0f; // Anzahl der gewünschten Farbstufen
         int uLevels = gl.glGetUniformLocation(shaderProgram, "u_levels");
-        gl.glUniform1f(uLevels, 5.0f); // 5 Farbstufen
+        gl.glUniform1f(uLevels, levels);
+        checkGLError(gl, "setting u_levels");
 
         // Textur binden
         if (texture != null) {
@@ -101,6 +109,7 @@ public class Main implements GLEventListener {
             // Übergebe die Textur an den Shader (Sampler2D erwartet eine Texture Unit)
             int uTexture = gl.glGetUniformLocation(shaderProgram, "u_texture");
             gl.glUniform1i(uTexture, 0); // Texture Unit 0
+            checkGLError(gl, "binding texture and setting u_texture");
         }
 
         // Quad zeichnen (z. B. mit 2 Dreiecken oder GL_QUADS)
@@ -110,6 +119,7 @@ public class Main implements GLEventListener {
         gl.glTexCoord2f(1f, 1f); gl.glVertex2f(1f, 1f);
         gl.glTexCoord2f(0f, 1f); gl.glVertex2f(-1f, 1f);
         gl.glEnd();
+        checkGLError(gl, "drawing quad");
 
         gl.glUseProgram(0); // Deaktivieren
     }
