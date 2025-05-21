@@ -48,10 +48,29 @@ public class Main implements GLEventListener {
         GL2 gl = drawable.getGL().getGL2();
         gl.glEnable(GL2.GL_TEXTURE_2D);
 
-        try {
+        /* try {
             // Shader laden
             String vertexSource = loadShaderSource("/shaders/posterization.vert");
             String fragmentSource = loadShaderSource("/shaders/posterization.frag");
+
+            System.out.println("Vertex Shader Source:\n" + vertexSource);
+            System.out.println("Fragment Shader Source:\n" + fragmentSource);
+            checkGLError(gl, "loading shader sources");
+
+            int vertexShader = compileShader(gl, GL2.GL_VERTEX_SHADER, vertexSource);
+            int fragmentShader = compileShader(gl, GL2.GL_FRAGMENT_SHADER, fragmentSource);
+            checkGLError(gl, "compiling shaders");
+
+            shaderProgram = linkProgram(gl, vertexShader, fragmentShader);
+            checkGLError(gl, "linking program");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } */
+
+        try {
+            // Shader laden – diesmal für Verzerrung
+            String vertexSource = loadShaderSource("/shaders/distortion.vert");
+            String fragmentSource = loadShaderSource("/shaders/distortion.frag");
 
             System.out.println("Vertex Shader Source:\n" + vertexSource);
             System.out.println("Fragment Shader Source:\n" + fragmentSource);
@@ -95,10 +114,21 @@ public class Main implements GLEventListener {
         checkGLError(gl, "glUseProgram");
 
         // Uniform setzen
-        float levels = 3.0f; // Anzahl der gewünschten Farbstufen
+        /* float levels = 3.0f; // Anzahl der gewünschten Farbstufen
         int uLevels = gl.glGetUniformLocation(shaderProgram, "u_levels");
         gl.glUniform1f(uLevels, levels);
-        checkGLError(gl, "setting u_levels");
+        checkGLError(gl, "setting u_levels"); */
+
+        // === Sinus-Uniforms setzen ===
+        float time = (System.currentTimeMillis() % 10000L) / 1000.0f;
+        int uTimeLoc = gl.glGetUniformLocation(shaderProgram, "u_time");
+        gl.glUniform1f(uTimeLoc, time);
+
+        int uAmplitudeLoc = gl.glGetUniformLocation(shaderProgram, "u_amplitude");
+        gl.glUniform1f(uAmplitudeLoc, 0.05f);
+
+        int uFrequencyLoc = gl.glGetUniformLocation(shaderProgram, "u_frequency");
+        gl.glUniform1f(uFrequencyLoc, 20.0f);
 
         // Textur binden
         if (texture != null) {
