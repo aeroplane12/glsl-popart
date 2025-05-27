@@ -1,11 +1,11 @@
 package com.glsl.popart;
 
+import com.glsl.popart.model.ShaderManager;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.swing.*;
-
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -17,8 +17,9 @@ import static com.glsl.popart.utils.TextureUtils.loadTexture;
 
 public class Main implements GLEventListener {
 
-    Texture texture;
-    int shaderProgram;
+    private Texture texture;
+
+    private ShaderManager shaderManager;
 
     public static void main(String[] args) {
         // OpenGL-Profil abrufen
@@ -48,40 +49,11 @@ public class Main implements GLEventListener {
         GL2 gl = drawable.getGL().getGL2();
         gl.glEnable(GL2.GL_TEXTURE_2D);
 
-        /* try {
-            // Shader laden
-            String vertexSource = loadShaderSource("/shaders/posterization.vert");
-            String fragmentSource = loadShaderSource("/shaders/posterization.frag");
-
-            System.out.println("Vertex Shader Source:\n" + vertexSource);
-            System.out.println("Fragment Shader Source:\n" + fragmentSource);
-            checkGLError(gl, "loading shader sources");
-
-            int vertexShader = compileShader(gl, GL2.GL_VERTEX_SHADER, vertexSource);
-            int fragmentShader = compileShader(gl, GL2.GL_FRAGMENT_SHADER, fragmentSource);
-            checkGLError(gl, "compiling shaders");
-
-            shaderProgram = linkProgram(gl, vertexShader, fragmentShader);
-            checkGLError(gl, "linking program");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } */
+        shaderManager = new ShaderManager();
 
         try {
-            // Shader laden – diesmal für Verzerrung
-            String vertexSource = loadShaderSource("/shaders/distortion.vert");
-            String fragmentSource = loadShaderSource("/shaders/distortion.frag");
-
-            System.out.println("Vertex Shader Source:\n" + vertexSource);
-            System.out.println("Fragment Shader Source:\n" + fragmentSource);
-            checkGLError(gl, "loading shader sources");
-
-            int vertexShader = compileShader(gl, GL2.GL_VERTEX_SHADER, vertexSource);
-            int fragmentShader = compileShader(gl, GL2.GL_FRAGMENT_SHADER, fragmentSource);
-            checkGLError(gl, "compiling shaders");
-
-            shaderProgram = linkProgram(gl, vertexShader, fragmentShader);
-            checkGLError(gl, "linking program");
+            shaderManager.loadShader(gl, "posterization", "/shaders/posterization.vert", "/shaders/posterization.frag");
+            shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,26 +81,22 @@ public class Main implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         checkGLError(gl, "glClear");
 
-        // Shader verwenden
-        gl.glUseProgram(shaderProgram);
-        checkGLError(gl, "glUseProgram");
+        // Shader aktivieren
+        shaderManager.useShader(gl, "posterization");
+        checkGLError(gl, "useShader");
+
+        /* shaderManager.useShader(gl, "distortion");
+        checkGLError(gl, "useShader"); */
 
         // Uniform setzen
-        /* float levels = 3.0f; // Anzahl der gewünschten Farbstufen
-        int uLevels = gl.glGetUniformLocation(shaderProgram, "u_levels");
-        gl.glUniform1f(uLevels, levels);
-        checkGLError(gl, "setting u_levels"); */
+        float levels = 3.0f; // Anzahl der gewünschten Farbstufen
+        shaderManager.setUniform1f(gl, "u_levels", levels);
+        checkGLError(gl, "setting u_levels");
 
         // === Sinus-Uniforms setzen ===
-        float time = (System.currentTimeMillis() % 10000L) / 1000.0f;
-        int uTimeLoc = gl.glGetUniformLocation(shaderProgram, "u_time");
-        gl.glUniform1f(uTimeLoc, time);
-
-        int uAmplitudeLoc = gl.glGetUniformLocation(shaderProgram, "u_amplitude");
-        gl.glUniform1f(uAmplitudeLoc, 0.05f);
-
-        int uFrequencyLoc = gl.glGetUniformLocation(shaderProgram, "u_frequency");
-        gl.glUniform1f(uFrequencyLoc, 20.0f);
+        /* shaderManager.setUniform1f(gl, "u_time", (System.currentTimeMillis() % 10000L) / 1000.0f);
+        shaderManager.setUniform1f(gl, "u_amplitude", 0.05f);
+        shaderManager.setUniform1f(gl, "u_frequency", 20.0f); */
 
         // Textur binden
         if (texture != null) {
@@ -137,7 +105,7 @@ public class Main implements GLEventListener {
             texture.bind(gl);
 
             // Übergebe die Textur an den Shader (Sampler2D erwartet eine Texture Unit)
-            int uTexture = gl.glGetUniformLocation(shaderProgram, "u_texture");
+            int uTexture = gl.glGetUniformLocation(shaderManager.getCurrentProgram(), "u_texture");
             gl.glUniform1i(uTexture, 0); // Texture Unit 0
             checkGLError(gl, "binding texture and setting u_texture");
         }
@@ -151,7 +119,7 @@ public class Main implements GLEventListener {
         gl.glEnd();
         checkGLError(gl, "drawing quad");
 
-        gl.glUseProgram(0); // Deaktivieren
+        shaderManager.stopShader(gl); // // Shader deaktivieren
     }
 
     // Cleanup, wenn Fenster geschlossen wird
