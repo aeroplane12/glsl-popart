@@ -1,6 +1,8 @@
 package com.glsl.popart;
 
 import com.glsl.popart.model.ShaderManager;
+import com.glsl.popart.model.ShaderPipeline;
+import com.glsl.popart.utils.FramebufferObject;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
@@ -8,18 +10,18 @@ import com.jogamp.opengl.util.FPSAnimator;
 import javax.swing.*;
 
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
-import java.io.InputStream;
 
 import static com.glsl.popart.utils.GLDebugUtils.checkGLError;
-import static com.glsl.popart.utils.ShaderUtils.*;
 import static com.glsl.popart.utils.TextureUtils.loadTexture;
 
 public class Main implements GLEventListener {
 
     private Texture texture;
-
     private ShaderManager shaderManager;
+    private ShaderPipeline shaderPipeline;
+
+    private int width = 800;
+    private int height = 600;
 
     public static void main(String[] args) {
         // OpenGL-Profil abrufen
@@ -49,14 +51,9 @@ public class Main implements GLEventListener {
         GL2 gl = drawable.getGL().getGL2();
         gl.glEnable(GL2.GL_TEXTURE_2D);
 
-        shaderManager = new ShaderManager();
-
-        try {
-            shaderManager.loadShader(gl, "posterization", "/shaders/posterization.vert", "/shaders/posterization.frag");
-            shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        initShaders(gl);
+        initFBOs(gl);
+        setupPipeline();
 
         try {
             // Textur laden
@@ -69,9 +66,33 @@ public class Main implements GLEventListener {
         }
     }
 
+    private void initShaders(GL2 gl) {
+        shaderManager = new ShaderManager();
+        try {
+            shaderManager.loadShader(gl, "posterization", "/shaders/posterization.vert", "/shaders/posterization.frag");
+            shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initFBOs(GL2 gl) {
+        shaderPipeline = new ShaderPipeline(shaderManager, width, height);
+        shaderPipeline.initFBOs(gl);
+    }
+
+    private void setupPipeline() {
+        shaderPipeline.clearShaders();
+        shaderPipeline.addShader("posterization");
+        shaderPipeline.addShader("distortion");
+    }
+
     // Wird bei Fenster-Resize aufgerufen
     @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {}
+    public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+        this.width = w;
+        this.height = h;
+    }
 
     // Zeichnen pro Frame
     @Override
@@ -81,49 +102,51 @@ public class Main implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         checkGLError(gl, "glClear");
 
-        // Shader aktivieren
-        shaderManager.useShader(gl, "posterization");
-        checkGLError(gl, "useShader");
+        if (texture == null) return;
 
-        /* shaderManager.useShader(gl, "distortion");
-        checkGLError(gl, "useShader"); */
+        texture.enable(gl);
+        texture.bind(gl);
 
-        // Uniform setzen
-        float levels = 3.0f; // Anzahl der gewünschten Farbstufen
-        shaderManager.setUniform1f(gl, "u_levels", levels);
-        checkGLError(gl, "setting u_levels");
+        int inputTextureId = texture.getTextureObject(gl);
 
-        // === Sinus-Uniforms setzen ===
-        /* shaderManager.setUniform1f(gl, "u_time", (System.currentTimeMillis() % 10000L) / 1000.0f);
-        shaderManager.setUniform1f(gl, "u_amplitude", 0.05f);
-        shaderManager.setUniform1f(gl, "u_frequency", 20.0f); */
+        // Shader Kette anwenden mit Uniform-Handling
+        int finalTextureId = shaderPipeline.renderPipeline(gl, inputTextureId);
 
-        // Textur binden
-        if (texture != null) {
-            gl.glActiveTexture(GL2.GL_TEXTURE0); // Texture Unit 0 aktivieren
-            texture.enable(gl);
-            texture.bind(gl);
+        // Auf Bildschirm zeichnen
+        drawFullScreenQuad(gl, finalTextureId);
 
-            // Übergebe die Textur an den Shader (Sampler2D erwartet eine Texture Unit)
-            int uTexture = gl.glGetUniformLocation(shaderManager.getCurrentProgram(), "u_texture");
-            gl.glUniform1i(uTexture, 0); // Texture Unit 0
-            checkGLError(gl, "binding texture and setting u_texture");
-        }
+        texture.disable(gl);
+    }
 
-        // Quad zeichnen (z. B. mit 2 Dreiecken oder GL_QUADS)
+    private void drawFullScreenQuad(GL2 gl, int textureId) {
+        gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+        gl.glViewport(0, 0, width, height);
+
+        gl.glActiveTexture(GL2.GL_TEXTURE0);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, textureId);
+
         gl.glBegin(GL2.GL_QUADS);
         gl.glTexCoord2f(0f, 0f); gl.glVertex2f(-1f, -1f);
         gl.glTexCoord2f(1f, 0f); gl.glVertex2f(1f, -1f);
         gl.glTexCoord2f(1f, 1f); gl.glVertex2f(1f, 1f);
         gl.glTexCoord2f(0f, 1f); gl.glVertex2f(-1f, 1f);
         gl.glEnd();
-        checkGLError(gl, "drawing quad");
-
-        shaderManager.stopShader(gl); // // Shader deaktivieren
     }
+
 
     // Cleanup, wenn Fenster geschlossen wird
     @Override
-    public void dispose(GLAutoDrawable drawable) {}
+    public void dispose(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+        if (shaderPipeline != null) {
+            shaderPipeline.dispose(gl);
+        }
+        if (shaderManager != null) {
+            shaderManager.dispose(gl);
+        }
+        if (texture != null) {
+            texture.destroy(gl);
+        }
+    }
 
 }

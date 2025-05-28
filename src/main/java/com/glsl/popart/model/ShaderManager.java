@@ -4,6 +4,7 @@ import com.glsl.popart.utils.ShaderUtils;
 import com.jogamp.opengl.GL2;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShaderManager {
@@ -60,6 +61,16 @@ public class ShaderManager {
             return;
         }
         gl.glUniform1f(location, value);
+    }
+
+    public void dispose(GL2 gl) {
+        for (int program : shaderPrograms.values()) {
+            if (program != 0) {
+                gl.glDeleteProgram(program);
+            }
+        }
+        shaderPrograms.clear();
+        currentProgram = -1;
     }
 
 }
