@@ -22,6 +22,7 @@ public class PipelineManager {
         try {
             shaderManager.loadShader(gl, "posterization", "/shaders/posterization.vert", "/shaders/posterization.frag");
             shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
+            shaderManager.loadShader(gl, "halftone", "/shaders/halftone.vert", "/shaders/halftone.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -34,8 +35,9 @@ public class PipelineManager {
 
     public void setupPipeline() {
         shaderPipeline.clearShaders();
-        shaderPipeline.addShader("posterization");
+        /* shaderPipeline.addShader("posterization"); */
         shaderPipeline.addShader("distortion");
+        shaderPipeline.addShader("halftone");
     }
 
     public ShaderManager getShaderManager() {

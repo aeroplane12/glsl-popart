@@ -98,6 +98,13 @@ public class ShaderPipeline {
                 if (uAmpLoc != -1) gl.glUniform1f(uAmpLoc, 0.05f);
                 if (uFreqLoc != -1) gl.glUniform1f(uFreqLoc, 20.0f);
             }
+            else if ("halftone".equals(shaderName)) {
+                int uDotSizeLoc = gl.glGetUniformLocation(program, "dotSize");
+                int uRes = gl.glGetUniformLocation(program, "resolution");
+
+                if (uDotSizeLoc != -1) gl.glUniform1f(uDotSizeLoc, 4.0f);
+                if (uRes != -1) gl.glUniform2f(uRes, width, height);
+            }
 
             // Fullscreen Quad rendern, damit Shader angewendet wird
             renderer.renderFullScreenQuad(gl);
