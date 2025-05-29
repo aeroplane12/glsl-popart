@@ -112,7 +112,6 @@ public class ShaderPipeline {
         return readTex;
     }
 
-    // Optional: Ressourcen freigeben
     public void dispose(GL2 gl) {
         if (fbo1 != null) fbo1.dispose(gl);
         if (fbo2 != null) fbo2.dispose(gl);

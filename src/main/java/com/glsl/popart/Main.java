@@ -37,7 +37,7 @@ public class Main implements GLEventListener {
         canvas.setSize(800, 600);
 
         // Fenster erzeugen
-        JFrame frame = new JFrame("GLSL PopArt Demo");
+        JFrame frame = new JFrame("GLSL PopArt");
         frame.getContentPane().add(canvas);
         frame.setSize(frame.getContentPane().getPreferredSize());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
