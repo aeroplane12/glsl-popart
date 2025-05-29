@@ -2,7 +2,8 @@ package com.glsl.popart;
 
 import com.glsl.popart.model.ShaderManager;
 import com.glsl.popart.model.ShaderPipeline;
-import com.glsl.popart.utils.FramebufferObject;
+import com.glsl.popart.controller.PipelineManager;
+import com.glsl.popart.utils.Renderer;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
@@ -22,6 +23,8 @@ public class Main implements GLEventListener {
 
     private int width = 800;
     private int height = 600;
+    private final Renderer renderer = new Renderer();
+    private PipelineManager pipelineManager;
 
     public static void main(String[] args) {
         // OpenGL-Profil abrufen
@@ -51,9 +54,13 @@ public class Main implements GLEventListener {
         GL2 gl = drawable.getGL().getGL2();
         gl.glEnable(GL2.GL_TEXTURE_2D);
 
-        initShaders(gl);
-        initFBOs(gl);
-        setupPipeline();
+        pipelineManager = new PipelineManager(width, height);
+        pipelineManager.initShaders(gl);
+        pipelineManager.initFBOs(gl);
+        pipelineManager.setupPipeline();
+
+        shaderManager = pipelineManager.getShaderManager();
+        shaderPipeline = pipelineManager.getShaderPipeline();
 
         try {
             // Textur laden
@@ -64,27 +71,6 @@ public class Main implements GLEventListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void initShaders(GL2 gl) {
-        shaderManager = new ShaderManager();
-        try {
-            shaderManager.loadShader(gl, "posterization", "/shaders/posterization.vert", "/shaders/posterization.frag");
-            shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initFBOs(GL2 gl) {
-        shaderPipeline = new ShaderPipeline(shaderManager, width, height);
-        shaderPipeline.initFBOs(gl);
-    }
-
-    private void setupPipeline() {
-        shaderPipeline.clearShaders();
-        shaderPipeline.addShader("posterization");
-        shaderPipeline.addShader("distortion");
     }
 
     // Wird bei Fenster-Resize aufgerufen
@@ -113,26 +99,10 @@ public class Main implements GLEventListener {
         int finalTextureId = shaderPipeline.renderPipeline(gl, inputTextureId);
 
         // Auf Bildschirm zeichnen
-        drawFullScreenQuad(gl, finalTextureId);
+        renderer.renderTextureToScreen(gl, finalTextureId, width, height);
 
         texture.disable(gl);
     }
-
-    private void drawFullScreenQuad(GL2 gl, int textureId) {
-        gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
-        gl.glViewport(0, 0, width, height);
-
-        gl.glActiveTexture(GL2.GL_TEXTURE0);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, textureId);
-
-        gl.glBegin(GL2.GL_QUADS);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex2f(-1f, -1f);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex2f(1f, -1f);
-        gl.glTexCoord2f(1f, 1f); gl.glVertex2f(1f, 1f);
-        gl.glTexCoord2f(0f, 1f); gl.glVertex2f(-1f, 1f);
-        gl.glEnd();
-    }
-
 
     // Cleanup, wenn Fenster geschlossen wird
     @Override

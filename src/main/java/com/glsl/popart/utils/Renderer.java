@@ -1,5 +1,6 @@
 package com.glsl.popart.utils;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 public class Renderer {
@@ -21,6 +22,17 @@ public class Renderer {
         gl.glVertex2f(-1f, 1f);
         gl.glEnd();
     }
+
+    public void renderTextureToScreen(GL2 gl, int textureId, int width, int height) {
+        gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+        gl.glViewport(0, 0, width, height);
+
+        gl.glActiveTexture(GL2.GL_TEXTURE0);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, textureId);
+
+        renderFullScreenQuad(gl);
+    }
+
 
     public void renderToFBO(GL2 gl, int shaderProgram, int inputTextureId, FramebufferObject targetFBO) {
         // Shader aktivieren, FBO binden, Textur setzen, Quad zeichnen, FBO entbinden
