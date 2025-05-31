@@ -5,7 +5,9 @@ import com.glsl.popart.utils.Renderer;
 import com.jogamp.opengl.GL2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShaderPipeline {
 
@@ -18,6 +20,7 @@ public class ShaderPipeline {
     private int width, height;
 
     private final Renderer renderer = new Renderer();
+    private final Map<String, ShaderUniformSetter> uniformSetters = new HashMap<>();
 
     public ShaderPipeline(ShaderManager shaderManager, int width, int height) {
         this.shaderManager = shaderManager;
@@ -26,6 +29,11 @@ public class ShaderPipeline {
 
         fbo1 = new FramebufferObject(width, height);
         fbo2 = new FramebufferObject(width, height);
+
+        // Uniform Setter registrieren
+        uniformSetters.put("posterization", new PosterizationUniformSetter());
+        uniformSetters.put("distortion", new DistortionUniformSetter());
+        uniformSetters.put("halftone", new HalftoneUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
@@ -82,28 +90,9 @@ public class ShaderPipeline {
                 gl.glUniform1i(loc, 0);
             }
 
-            // === Shader-spezifische Uniforms ===
-            if ("posterization".equals(shaderName)) {
-                int uLevelsLoc = gl.glGetUniformLocation(program, "u_levels");
-                if (uLevelsLoc != -1) {
-                    gl.glUniform1f(uLevelsLoc, 3.0f);  // Beispielwert
-                }
-            } else if ("distortion".equals(shaderName)) {
-                float time = (System.currentTimeMillis() % 10000L) / 1000.0f;
-                int uTimeLoc = gl.glGetUniformLocation(program, "u_time");
-                int uAmpLoc = gl.glGetUniformLocation(program, "u_amplitude");
-                int uFreqLoc = gl.glGetUniformLocation(program, "u_frequency");
-
-                if (uTimeLoc != -1) gl.glUniform1f(uTimeLoc, time);
-                if (uAmpLoc != -1) gl.glUniform1f(uAmpLoc, 0.05f);
-                if (uFreqLoc != -1) gl.glUniform1f(uFreqLoc, 20.0f);
-            }
-            else if ("halftone".equals(shaderName)) {
-                int uDotSizeLoc = gl.glGetUniformLocation(program, "dotSize");
-                int uRes = gl.glGetUniformLocation(program, "resolution");
-
-                if (uDotSizeLoc != -1) gl.glUniform1f(uDotSizeLoc, 4.0f);
-                if (uRes != -1) gl.glUniform2f(uRes, width, height);
+            ShaderUniformSetter setter = uniformSetters.get(shaderName);
+            if (setter != null) {
+                setter.setUniforms(gl, program, width, height);
             }
 
             // Fullscreen Quad rendern, damit Shader angewendet wird
