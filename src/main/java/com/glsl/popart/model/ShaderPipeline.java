@@ -34,6 +34,7 @@ public class ShaderPipeline {
         uniformSetters.put("posterization", new PosterizationUniformSetter());
         uniformSetters.put("distortion", new DistortionUniformSetter());
         uniformSetters.put("halftone", new HalftoneUniformSetter());
+        uniformSetters.put("comiclook", new ComicLookUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
