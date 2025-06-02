@@ -1,5 +1,5 @@
 #version 120
-
+// Phsikalsischer Effekt
 uniform sampler2D u_texture;
 uniform float u_time;  // Zeit für Animation
 uniform float u_amplitude; // Amplitude der Wellen

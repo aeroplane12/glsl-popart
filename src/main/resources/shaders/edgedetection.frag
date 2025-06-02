@@ -1,5 +1,5 @@
 #version 120
-
+// Teiltechnik
 uniform sampler2D u_texture;
 uniform vec2 resolution;
 

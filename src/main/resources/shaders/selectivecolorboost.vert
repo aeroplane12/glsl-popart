@@ -1,5 +1,5 @@
 #version 120
-// Teiltechnik
+
 varying vec2 vTexCoord;
 
 void main() {
