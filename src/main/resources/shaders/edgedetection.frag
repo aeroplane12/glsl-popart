@@ -37,7 +37,7 @@ float edgeDetection(vec2 uv) {
 
 void main() {
     float edge = edgeDetection(vTexCoord);
-    // Schwarz-weiß Kanten (invertiert für bessere Sichtbarkeit)
-    float edgeVal = 1.0 - edge;
+    float threshold = 0.5;
+    float edgeVal = edge > threshold ? 1.0 : 0.0;  // Weiß auf Schwarz
     gl_FragColor = vec4(vec3(edgeVal), 1.0);
 }
