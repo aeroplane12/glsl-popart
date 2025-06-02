@@ -24,6 +24,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "distortion", "/shaders/distortion.vert", "/shaders/distortion.frag");
             shaderManager.loadShader(gl, "halftone", "/shaders/halftone.vert", "/shaders/halftone.frag");
             shaderManager.loadShader(gl, "comiclook", "/shaders/comiclook.vert", "/shaders/comiclook.frag");
+            shaderManager.loadShader(gl, "duotone", "/shaders/duotone.vert", "/shaders/duotone.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +40,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("posterization"); */
         /* shaderPipeline.addShader("distortion"); */
         /* shaderPipeline.addShader("halftone"); */
-        shaderPipeline.addShader("comiclook");
+        /* shaderPipeline.addShader("comiclook"); */
+        shaderPipeline.addShader("duotone");
     }
 
     public ShaderManager getShaderManager() {
