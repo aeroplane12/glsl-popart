@@ -36,6 +36,7 @@ public class ShaderPipeline {
         uniformSetters.put("halftone", new HalftoneUniformSetter());
         uniformSetters.put("comiclook", new ComicLookUniformSetter());
         uniformSetters.put("duotone", new DuotoneUniformSetter());
+        uniformSetters.put("edgedetection", new EdgeDetectionUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
