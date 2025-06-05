@@ -29,6 +29,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "selectivecolorboost", "/shaders/selectivecolorboost.vert", "/shaders/selectivecolorboost.frag");
             shaderManager.loadShader(gl, "bendaydots", "/shaders/bendaydots.vert", "/shaders/bendaydots.frag");
             shaderManager.loadShader(gl, "bloom", "/shaders/bloom.vert", "/shaders/bloom.frag");
+            shaderManager.loadShader(gl, "tritone", "/shaders/tritone.vert", "/shaders/tritone.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +50,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("edgedetection"); */
         /* shaderPipeline.addShader("selectivecolorboost"); */
         /* shaderPipeline.addShader("bendaydots"); */
-        shaderPipeline.addShader("bloom");
+        /* shaderPipeline.addShader("bloom"); */
+        shaderPipeline.addShader("tritone");
     }
 
     public ShaderManager getShaderManager() {

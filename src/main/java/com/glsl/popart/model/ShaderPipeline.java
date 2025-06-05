@@ -40,6 +40,7 @@ public class ShaderPipeline {
         uniformSetters.put("selectivecolorboost", new SelectiveColorBoostUniformSetter());
         uniformSetters.put("bendaydots", new BenDayDotsUniformSetter());
         uniformSetters.put("bloom", new BloomUniformSetter());
+        uniformSetters.put("tritone", new TritoneUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
