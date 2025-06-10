@@ -32,6 +32,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "tritone", "/shaders/tritone.vert", "/shaders/tritone.frag");
             shaderManager.loadShader(gl, "chromaticaberration", "/shaders/chromaticaberration.vert", "/shaders/chromaticaberration.frag");
             shaderManager.loadShader(gl, "noise", "/shaders/noise.vert", "/shaders/noise.frag");
+            shaderManager.loadShader(gl, "vignette", "/shaders/vignette.vert", "/shaders/vignette.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,7 +45,7 @@ public class PipelineManager {
 
     public void setupPipeline() {
         shaderPipeline.clearShaders();
-        shaderPipeline.addShader("posterization");
+        /* shaderPipeline.addShader("posterization"); */
         /* shaderPipeline.addShader("distortion"); */
         /* shaderPipeline.addShader("halftone"); */
         /* shaderPipeline.addShader("comiclook"); */
@@ -53,9 +54,10 @@ public class PipelineManager {
         /* shaderPipeline.addShader("selectivecolorboost"); */
         /* shaderPipeline.addShader("bendaydots"); */
         /* shaderPipeline.addShader("bloom"); */
-        /* shaderPipeline.addShader("tritone"); */
+        shaderPipeline.addShader("tritone");
         /* shaderPipeline.addShader("chromaticaberration"); */
-        shaderPipeline.addShader("noise");
+        /* shaderPipeline.addShader("noise"); */
+        shaderPipeline.addShader("vignette");
     }
 
     public ShaderManager getShaderManager() {

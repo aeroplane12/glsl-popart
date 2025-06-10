@@ -43,6 +43,7 @@ public class ShaderPipeline {
         uniformSetters.put("tritone", new TritoneUniformSetter());
         uniformSetters.put("chromaticaberration", new ChromaticAberrationUniformSetter());
         uniformSetters.put("noise", new NoiseUniformSetter());
+        uniformSetters.put("vignette", new VignetteUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
