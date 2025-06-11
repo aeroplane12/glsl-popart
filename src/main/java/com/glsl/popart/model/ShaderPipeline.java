@@ -44,6 +44,7 @@ public class ShaderPipeline {
         uniformSetters.put("chromaticaberration", new ChromaticAberrationUniformSetter());
         uniformSetters.put("noise", new NoiseUniformSetter());
         uniformSetters.put("vignette", new VignetteUniformSetter());
+        uniformSetters.put("OutOfRegisterPrintShader", new OutOfRegisterPrintShaderUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {

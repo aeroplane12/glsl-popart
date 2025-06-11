@@ -33,6 +33,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "chromaticaberration", "/shaders/chromaticaberration.vert", "/shaders/chromaticaberration.frag");
             shaderManager.loadShader(gl, "noise", "/shaders/noise.vert", "/shaders/noise.frag");
             shaderManager.loadShader(gl, "vignette", "/shaders/vignette.vert", "/shaders/vignette.frag");
+            shaderManager.loadShader(gl, "OutOfRegisterPrintShader", "/shaders/OutOfRegisterPrintShader.vert", "/shaders/OutOfRegisterPrintShader.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,10 +55,11 @@ public class PipelineManager {
         /* shaderPipeline.addShader("selectivecolorboost"); */
         /* shaderPipeline.addShader("bendaydots"); */
         /* shaderPipeline.addShader("bloom"); */
-        shaderPipeline.addShader("tritone");
+        /* shaderPipeline.addShader("tritone"); */
         /* shaderPipeline.addShader("chromaticaberration"); */
         /* shaderPipeline.addShader("noise"); */
-        shaderPipeline.addShader("vignette");
+        /* shaderPipeline.addShader("vignette"); */
+        shaderPipeline.addShader("OutOfRegisterPrintShader");
     }
 
     public ShaderManager getShaderManager() {
