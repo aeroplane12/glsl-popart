@@ -34,6 +34,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "noise", "/shaders/noise.vert", "/shaders/noise.frag");
             shaderManager.loadShader(gl, "vignette", "/shaders/vignette.vert", "/shaders/vignette.frag");
             shaderManager.loadShader(gl, "OutOfRegisterPrintShader", "/shaders/OutOfRegisterPrintShader.vert", "/shaders/OutOfRegisterPrintShader.frag");
+            shaderManager.loadShader(gl, "IntelligentBoldOutlines", "/shaders/IntelligentBoldOutlines.vert", "/shaders/IntelligentBoldOutlines.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,7 +60,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("chromaticaberration"); */
         /* shaderPipeline.addShader("noise"); */
         /* shaderPipeline.addShader("vignette"); */
-        shaderPipeline.addShader("OutOfRegisterPrintShader");
+        /* shaderPipeline.addShader("OutOfRegisterPrintShader"); */
+        shaderPipeline.addShader("IntelligentBoldOutlines");
     }
 
     public ShaderManager getShaderManager() {
