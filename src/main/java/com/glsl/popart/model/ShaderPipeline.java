@@ -47,6 +47,7 @@ public class ShaderPipeline {
         uniformSetters.put("OutOfRegisterPrintShader", new OutOfRegisterPrintShaderUniformSetter());
         uniformSetters.put("IntelligentBoldOutlines", new IntelligentBoldOutlinesUniformSetter());
         uniformSetters.put("seriality", new SerialityUniformSetter());
+        uniformSetters.put("chromaticwavedistortion", new ChromaticWaveDistortionUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
