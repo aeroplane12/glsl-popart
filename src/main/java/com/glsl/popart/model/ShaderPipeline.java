@@ -46,6 +46,7 @@ public class ShaderPipeline {
         uniformSetters.put("vignette", new VignetteUniformSetter());
         uniformSetters.put("OutOfRegisterPrintShader", new OutOfRegisterPrintShaderUniformSetter());
         uniformSetters.put("IntelligentBoldOutlines", new IntelligentBoldOutlinesUniformSetter());
+        uniformSetters.put("seriality", new SerialityUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {
