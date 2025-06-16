@@ -48,6 +48,7 @@ public class ShaderPipeline {
         uniformSetters.put("IntelligentBoldOutlines", new IntelligentBoldOutlinesUniformSetter());
         uniformSetters.put("seriality", new SerialityUniformSetter());
         uniformSetters.put("chromaticwavedistortion", new ChromaticWaveDistortionUniformSetter());
+        uniformSetters.put("scanline", new ScanlineUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {

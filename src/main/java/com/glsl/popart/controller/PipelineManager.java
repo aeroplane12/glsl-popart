@@ -37,6 +37,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "IntelligentBoldOutlines", "/shaders/IntelligentBoldOutlines.vert", "/shaders/IntelligentBoldOutlines.frag");
             shaderManager.loadShader(gl, "seriality", "/shaders/seriality.vert", "/shaders/seriality.frag");
             shaderManager.loadShader(gl, "chromaticwavedistortion", "/shaders/chromaticwavedistortion.vert", "/shaders/chromaticwavedistortion.frag");
+            shaderManager.loadShader(gl, "scanline", "/shaders/scanline.vert", "/shaders/scanline.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,7 +66,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("OutOfRegisterPrintShader"); */
         /* shaderPipeline.addShader("IntelligentBoldOutlines"); */
         /* shaderPipeline.addShader("seriality"); */
-        shaderPipeline.addShader("chromaticwavedistortion");
+        /* shaderPipeline.addShader("chromaticwavedistortion"); */
+        shaderPipeline.addShader("scanline");
     }
 
     public ShaderManager getShaderManager() {
