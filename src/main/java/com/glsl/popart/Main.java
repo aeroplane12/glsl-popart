@@ -64,7 +64,7 @@ public class Main implements GLEventListener {
 
         try {
             // Textur laden
-            texture = loadTexture("/textures/horse.jpg");
+            texture = loadTexture("/textures/forestinfire.jpg");
             if (texture == null) {
                 System.err.println("Textur konnte nicht geladen werden.");
             }
