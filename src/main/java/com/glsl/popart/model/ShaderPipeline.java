@@ -51,6 +51,7 @@ public class ShaderPipeline {
         uniformSetters.put("scanline", new ScanlineUniformSetter());
         uniformSetters.put("waterripple", new WaterRippleUniformSetter());
         uniformSetters.put("heatdistortion", new HeatDistortionUniformSetter());
+        uniformSetters.put("refraction", new RefractionUniformSetter());
     }
 
     public void initFBOs(GL2 gl) {

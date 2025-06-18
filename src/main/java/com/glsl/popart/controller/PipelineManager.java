@@ -40,6 +40,7 @@ public class PipelineManager {
             shaderManager.loadShader(gl, "scanline", "/shaders/scanline.vert", "/shaders/scanline.frag");
             shaderManager.loadShader(gl, "waterripple", "/shaders/waterripple.vert", "/shaders/waterripple.frag");
             shaderManager.loadShader(gl, "heatdistortion", "/shaders/heatdistortion.vert", "/shaders/heatdistortion.frag");
+            shaderManager.loadShader(gl, "refraction", "/shaders/refraction.vert", "/shaders/refraction.frag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,7 +57,7 @@ public class PipelineManager {
         /* shaderPipeline.addShader("distortion"); */
         /* shaderPipeline.addShader("halftone"); */
         /* shaderPipeline.addShader("comiclook"); */
-        shaderPipeline.addShader("duotone");
+        /* shaderPipeline.addShader("duotone"); */
         /* shaderPipeline.addShader("edgedetection"); */
         /* shaderPipeline.addShader("selectivecolorboost"); */
         /* shaderPipeline.addShader("bendaydots"); */
@@ -70,8 +71,9 @@ public class PipelineManager {
         /* shaderPipeline.addShader("seriality"); */
         /* shaderPipeline.addShader("chromaticwavedistortion"); */
         /* shaderPipeline.addShader("scanline"); */
-        shaderPipeline.addShader("waterripple");
+        /* shaderPipeline.addShader("waterripple"); */
         /* shaderPipeline.addShader("heatdistortion"); */
+        shaderPipeline.addShader("refraction");
     }
 
     public ShaderManager getShaderManager() {
