@@ -55,8 +55,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("posterization"); */
         /* shaderPipeline.addShader("distortion"); */
         /* shaderPipeline.addShader("halftone"); */
-        shaderPipeline.addShader("comiclook");
-        /* shaderPipeline.addShader("duotone"); */
+        /* shaderPipeline.addShader("comiclook"); */
+        shaderPipeline.addShader("duotone");
         /* shaderPipeline.addShader("edgedetection"); */
         /* shaderPipeline.addShader("selectivecolorboost"); */
         /* shaderPipeline.addShader("bendaydots"); */
@@ -70,8 +70,8 @@ public class PipelineManager {
         /* shaderPipeline.addShader("seriality"); */
         /* shaderPipeline.addShader("chromaticwavedistortion"); */
         /* shaderPipeline.addShader("scanline"); */
-        /* shaderPipeline.addShader("waterripple"); */
-        shaderPipeline.addShader("heatdistortion");
+        shaderPipeline.addShader("waterripple");
+        /* shaderPipeline.addShader("heatdistortion"); */
     }
 
     public ShaderManager getShaderManager() {
