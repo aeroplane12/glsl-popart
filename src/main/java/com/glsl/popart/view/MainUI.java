@@ -1,10 +1,12 @@
 package com.glsl.popart.view;
 
+import com.glsl.popart.controller.PipelineManager;
+import com.glsl.popart.model.ShaderManager;
+import com.glsl.popart.model.ShaderPipeline;
 import com.glsl.popart.utils.Renderer;
 import com.glsl.popart.utils.TextureUtils;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.texture.Texture;
 
 import javax.swing.*;
@@ -17,6 +19,11 @@ public class MainUI extends JFrame {
     private Renderer renderer;
     private Texture loadedTexture;
     private int textureId = -1;
+    private ShaderManager shaderManager;
+    private ShaderPipeline shaderPipeline;
+    private PipelineManager pipelineManager;
+    private int canvasWidth = 400;
+    private int canvasHeight = 600;
 
     public MainUI() {
         setTitle("GLSL PopArt");
@@ -39,6 +46,10 @@ public class MainUI extends JFrame {
                 "chromaticwavedistortion", "scanline", "waterripple", "heatdistortion", "refraction"
         }));
 
+        // Listener: Shader aktivieren beim Klick
+        popArtEffectsList.addListSelectionListener(e -> onShaderSelection());
+        physicalEffectsList.addListSelectionListener(e -> onShaderSelection());
+
         effectPanel.add(new JScrollPane(popArtEffectsList));
         effectPanel.add(new JScrollPane(physicalEffectsList));
 
@@ -55,6 +66,14 @@ public class MainUI extends JFrame {
                 // Init nur einmal
                 GL2 gl = drawable.getGL().getGL2();
                 gl.glEnable(GL2.GL_TEXTURE_2D);
+
+                pipelineManager = new PipelineManager(canvasWidth, canvasHeight);
+                pipelineManager.initShaders(gl);
+                pipelineManager.initFBOs(gl);
+                pipelineManager.setupPipeline();
+
+                shaderManager = pipelineManager.getShaderManager();
+                shaderPipeline = pipelineManager.getShaderPipeline();
             }
 
             @Override
@@ -67,22 +86,25 @@ public class MainUI extends JFrame {
                     loadedTexture.enable(gl);
                     loadedTexture.bind(gl);
 
-                    renderer.renderFullScreenQuad(gl);
+                    int inputTextureId = loadedTexture.getTextureObject(gl);
+                    int finalTextureId = shaderPipeline.renderPipeline(gl, inputTextureId);
+
+                    renderer.renderTextureToScreen(gl, finalTextureId, canvasWidth, canvasHeight);
 
                     loadedTexture.disable(gl);
                 }
             }
 
             @Override
-            public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {}
+            public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+                canvasWidth = w;
+                canvasHeight = h;
+            }
             @Override
             public void dispose(GLAutoDrawable drawable) {}
         });
 
-        previewCanvas.setPreferredSize(new Dimension(400, 600));
-
-        /* FPSAnimator animator = new FPSAnimator(previewCanvas, 60);
-        animator.start(); */
+        previewCanvas.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 effectPanel, previewCanvas);
@@ -143,6 +165,24 @@ public class MainUI extends JFrame {
         }
     }
 
+    private void onShaderSelection() {
+        if (shaderPipeline == null) return;
+
+        // Alle selektierten Shader zusammenfassen
+        java.util.List<String> selectedShaders = new java.util.ArrayList<>();
+        selectedShaders.addAll(popArtEffectsList.getSelectedValuesList());
+        selectedShaders.addAll(physicalEffectsList.getSelectedValuesList());
+
+        // Pipeline aktualisieren
+        previewCanvas.invoke(true, drawable -> {
+            shaderPipeline.clearShaders();
+            for (String shader : selectedShaders) {
+                shaderPipeline.addShader(shader);
+            }
+            SwingUtilities.invokeLater(() -> previewCanvas.display());
+            return true;
+        });
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
