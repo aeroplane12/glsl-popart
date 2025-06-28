@@ -11,6 +11,10 @@ import com.jogamp.opengl.util.texture.Texture;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainUI extends JFrame {
     private JList<String> popArtEffectsList;
@@ -24,6 +28,7 @@ public class MainUI extends JFrame {
     private PipelineManager pipelineManager;
     private int canvasWidth = 400;
     private int canvasHeight = 600;
+    private final Set<String> activeShaders = new HashSet<>();
 
     public MainUI() {
         setTitle("GLSL PopArt");
@@ -46,9 +51,8 @@ public class MainUI extends JFrame {
                 "chromaticwavedistortion", "scanline", "waterripple", "heatdistortion", "refraction"
         }));
 
-        // Listener: Shader aktivieren beim Klick
-        popArtEffectsList.addListSelectionListener(e -> onShaderSelection());
-        physicalEffectsList.addListSelectionListener(e -> onShaderSelection());
+        setupEffectList(popArtEffectsList);
+        setupEffectList(physicalEffectsList);
 
         effectPanel.add(new JScrollPane(popArtEffectsList));
         effectPanel.add(new JScrollPane(physicalEffectsList));
@@ -165,18 +169,33 @@ public class MainUI extends JFrame {
         }
     }
 
-    private void onShaderSelection() {
+    private void setupEffectList(JList<String> list) {
+        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = list.locationToIndex(e.getPoint());
+                if (index != -1) {
+                    String selected = list.getModel().getElementAt(index);
+                    if (activeShaders.contains(selected)) {
+                        activeShaders.remove(selected);
+                        list.removeSelectionInterval(index, index);
+                    } else {
+                        activeShaders.add(selected);
+                        list.addSelectionInterval(index, index);
+                    }
+                    updateShaderPipeline();
+                }
+            }
+        });
+    }
+
+    private void updateShaderPipeline() {
         if (shaderPipeline == null) return;
 
-        // Alle selektierten Shader zusammenfassen
-        java.util.List<String> selectedShaders = new java.util.ArrayList<>();
-        selectedShaders.addAll(popArtEffectsList.getSelectedValuesList());
-        selectedShaders.addAll(physicalEffectsList.getSelectedValuesList());
-
-        // Pipeline aktualisieren
         previewCanvas.invoke(true, drawable -> {
             shaderPipeline.clearShaders();
-            for (String shader : selectedShaders) {
+            for (String shader : activeShaders) {
                 shaderPipeline.addShader(shader);
             }
             SwingUtilities.invokeLater(() -> previewCanvas.display());
