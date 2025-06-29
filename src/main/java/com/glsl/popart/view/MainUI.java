@@ -119,8 +119,12 @@ public class MainUI extends JFrame {
         JButton loadTextureButton = new JButton("Textur hochladen");
         loadTextureButton.addActionListener(e -> onLoadTexture());
 
+        JButton editParamsButton = new JButton("Parameter");
+        editParamsButton.addActionListener(e -> onEditParameters());
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(loadTextureButton);
+        bottomPanel.add(editParamsButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -201,6 +205,166 @@ public class MainUI extends JFrame {
             SwingUtilities.invokeLater(() -> previewCanvas.display());
             return true;
         });
+    }
+
+    private void onEditParameters() {
+        if (activeShaders.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Kein Effekt aktiv.");
+            return;
+        }
+
+        for (String effectName : activeShaders) {
+            showParameterDialog(effectName);
+        }
+    }
+
+    private void showParameterDialog(String effectName) {
+        switch (effectName) {
+            case "posterization":
+                showPosterizationDialog();
+                break;
+            case "halftone":
+                showHalftoneDialog();
+                break;
+            case "comiclook":
+                showComicLookDialog();
+                break;
+            case "duotone":
+                showDuotoneDialog();
+                break;
+            case "selectivecolorboost":
+                showSelectiveColorBoostDialog();
+                break;
+            case "bendaydots":
+                showBendayDotsDialog();
+                break;
+            case "tritone":
+                showTritoneDialog();
+                break;
+            case "OutOfRegisterPrintShader":
+                showOutOfRegisterPrintDialog();
+                break;
+            case "IntelligentBoldOutlines":
+                showIntelligentBoldOutlinesDialog();
+                break;
+            case "seriality":
+                showSerialityDialog();
+                break;
+            case "distortion":
+                showDistortionDialog();
+                break;
+            case "bloom":
+                showBloomDialog();
+                break;
+            case "chromaticaberration":
+                showChromaticAberrationDialog();
+                break;
+            case "noise":
+                showNoiseDialog();
+                break;
+            case "vignette":
+                showVignetteDialog();
+                break;
+            case "chromaticwavedistortion":
+                showChromaticWaveDistortionDialog();
+                break;
+            case "scanline":
+                showScanlineDialog();
+                break;
+            case "waterripple":
+                showWaterRippleDialog();
+                break;
+            case "heatdistortion":
+                showHeatDistortionDialog();
+                break;
+            case "refraction":
+                showRefractionDialog();
+                break;
+            default:
+                JOptionPane.showMessageDialog(this,
+                        "Kein Parameterdialog für: " + effectName);
+                break;
+        }
+    }
+
+    private void showPosterizationDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein PosterizationDialog.");
+    }
+
+    private void showHalftoneDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein HalftoneDialog.");
+    }
+
+    private void showComicLookDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein ComicLookDialog.");
+    }
+
+    private void showDuotoneDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein DuotoneDialog.");
+    }
+
+    private void showSelectiveColorBoostDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein SelectiveColorBoostDialog.");
+    }
+
+    private void showBendayDotsDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein BendayDotsDialog.");
+    }
+
+    private void showTritoneDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein TritoneDialog.");
+    }
+
+    private void showOutOfRegisterPrintDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein OutOfRegisterPrintDialog.");
+    }
+
+    private void showIntelligentBoldOutlinesDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein IntelligentBoldOutlinesDialog.");
+    }
+
+    private void showSerialityDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein SerialityDialog.");
+    }
+
+    private void showDistortionDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein DistortionDialog.");
+    }
+
+    private void showBloomDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein BloomDialog.");
+    }
+
+    private void showChromaticAberrationDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein ChromaticAberrationDialog.");
+    }
+
+    private void showNoiseDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein NoiseDialog.");
+    }
+
+    private void showVignetteDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein VignetteDialog.");
+    }
+
+    private void showChromaticWaveDistortionDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein ChromaticWaveDistortionDialog.");
+    }
+
+    private void showScanlineDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein ScanlineDialog.");
+    }
+
+    private void showWaterRippleDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein WaterRippleDialog.");
+    }
+
+    private void showHeatDistortionDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein HeatDistortionDialog.");
+    }
+
+    private void showRefractionDialog() {
+        JOptionPane.showMessageDialog(this, "Hier kommt dein RefractionDialog.");
     }
 
     public static void main(String[] args) {
