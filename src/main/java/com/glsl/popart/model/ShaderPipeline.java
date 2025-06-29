@@ -131,4 +131,9 @@ public class ShaderPipeline {
         if (fbo2 != null) fbo2.dispose(gl);
     }
 
+    public ShaderUniformSetter getUniformSetter(String name) {
+        return uniformSetters.get(name);
+    }
+
+
 }

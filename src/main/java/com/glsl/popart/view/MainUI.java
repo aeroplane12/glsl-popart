@@ -1,8 +1,7 @@
 package com.glsl.popart.view;
 
 import com.glsl.popart.controller.PipelineManager;
-import com.glsl.popart.model.ShaderManager;
-import com.glsl.popart.model.ShaderPipeline;
+import com.glsl.popart.model.*;
 import com.glsl.popart.utils.Renderer;
 import com.glsl.popart.utils.TextureUtils;
 import com.jogamp.opengl.*;
@@ -292,10 +291,29 @@ public class MainUI extends JFrame {
         dialog.setVisible(true);
         int level = dialog.getPosterizationLevel();
         System.out.println("Setze Posterization-Uniform-Level auf: " + level);
+
+        // UniformSetter abrufen und neuen Level setzen
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("posterization");
+        if (setter instanceof PosterizationUniformSetter) {
+            ((PosterizationUniformSetter) setter).setLevels(level);
+        }
+
+        // Vorschau neu zeichnen
+        previewCanvas.display();
     }
 
     private void showHalftoneDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein HalftoneDialog.");
+        HalftoneDialog dialog = new HalftoneDialog(this);
+        dialog.setVisible(true);
+        int dotSize = dialog.getDotSize();
+        System.out.println("Setze Halftone dotSize Uniform auf: " + dotSize);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("halftone");
+        if (setter instanceof HalftoneUniformSetter) {
+            ((HalftoneUniformSetter) setter).setDotSize(dotSize);
+        }
+
+        previewCanvas.display();
     }
 
     private void showComicLookDialog() {
