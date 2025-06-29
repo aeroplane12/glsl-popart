@@ -73,7 +73,7 @@ public class PipelineManager {
         /* shaderPipeline.addShader("scanline"); */
         /* shaderPipeline.addShader("waterripple"); */
         /* shaderPipeline.addShader("heatdistortion"); */
-        shaderPipeline.addShader("refraction");
+        /* shaderPipeline.addShader("refraction"); */
     }
 
     public ShaderManager getShaderManager() {
