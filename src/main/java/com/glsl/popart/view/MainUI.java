@@ -288,7 +288,10 @@ public class MainUI extends JFrame {
     }
 
     private void showPosterizationDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein PosterizationDialog.");
+        PosterizationDialog dialog = new PosterizationDialog(this);
+        dialog.setVisible(true);
+        int level = dialog.getPosterizationLevel();
+        System.out.println("Setze Posterization-Uniform-Level auf: " + level);
     }
 
     private void showHalftoneDialog() {
