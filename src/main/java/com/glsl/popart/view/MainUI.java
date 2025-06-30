@@ -317,7 +317,17 @@ public class MainUI extends JFrame {
     }
 
     private void showComicLookDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein ComicLookDialog.");
+        ComicLookDialog dialog = new ComicLookDialog(this);
+        dialog.setVisible(true);
+        int levels = dialog.getLevels();
+        System.out.println("Setze ComicLook-Uniform-Level auf: " + levels);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("comiclook");
+        if (setter instanceof ComicLookUniformSetter) {
+            ((ComicLookUniformSetter) setter).setLevels(levels);
+        }
+
+        previewCanvas.display();
     }
 
     private void showDuotoneDialog() {
