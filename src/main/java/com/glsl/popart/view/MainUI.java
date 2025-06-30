@@ -351,7 +351,24 @@ public class MainUI extends JFrame {
     }
 
     private void showSelectiveColorBoostDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein SelectiveColorBoostDialog.");
+        SelectiveColorBoostDialog dialog = new SelectiveColorBoostDialog(this);
+        dialog.setVisible(true);
+
+        float threshold = dialog.getThreshold();
+        float boost = dialog.getBoostAmount();
+        float[] color = dialog.getTargetColor();
+
+        System.out.printf("SelectiveColorBoost → Threshold: %.2f, Boost: %.2f, Color: [%.2f, %.2f, %.2f]%n",
+                threshold, boost, color[0], color[1], color[2]);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("selectivecolorboost");
+        if (setter instanceof SelectiveColorBoostUniformSetter) {
+            ((SelectiveColorBoostUniformSetter) setter).setThreshold(threshold);
+            ((SelectiveColorBoostUniformSetter) setter).setBoostAmount(boost);
+            ((SelectiveColorBoostUniformSetter) setter).setTargetColor(color);
+        }
+
+        previewCanvas.display();
     }
 
     private void showBendayDotsDialog() {
