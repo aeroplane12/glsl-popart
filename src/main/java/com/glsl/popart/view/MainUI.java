@@ -372,7 +372,17 @@ public class MainUI extends JFrame {
     }
 
     private void showBendayDotsDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein BendayDotsDialog.");
+        BenDayDotsDialog dialog = new BenDayDotsDialog(this);
+        dialog.setVisible(true);
+        int dotSize = dialog.getDotSize();
+        System.out.println("Setze BenDayDots dotSize auf: " + dotSize);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("bendaydots");
+        if (setter instanceof BenDayDotsUniformSetter) {
+            ((BenDayDotsUniformSetter) setter).setDotSize(dotSize);
+        }
+
+        previewCanvas.display();
     }
 
     private void showTritoneDialog() {
