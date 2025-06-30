@@ -410,7 +410,17 @@ public class MainUI extends JFrame {
     }
 
     private void showOutOfRegisterPrintDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein OutOfRegisterPrintDialog.");
+        OutOfRegisterPrintShaderDialog dialog = new OutOfRegisterPrintShaderDialog(this);
+        dialog.setVisible(true);
+        float offset = dialog.getSelectedOffset();
+        System.out.println("Setze OutOfRegisterPrint-Offset auf: " + offset);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("OutOfRegisterPrintShader");
+        if (setter instanceof OutOfRegisterPrintShaderUniformSetter) {
+            ((OutOfRegisterPrintShaderUniformSetter) setter).setOffset(offset);
+        }
+
+        previewCanvas.display();
     }
 
     private void showIntelligentBoldOutlinesDialog() {
