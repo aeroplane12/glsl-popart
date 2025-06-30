@@ -331,7 +331,23 @@ public class MainUI extends JFrame {
     }
 
     private void showDuotoneDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein DuotoneDialog.");
+        DuotoneDialog dialog = new DuotoneDialog(this);
+        dialog.setVisible(true);
+
+        float[] dark = dialog.getDarkColor();
+        float[] light = dialog.getLightColor();
+
+        System.out.println("Setze Duotone-Farben:");
+        System.out.printf("Dark:  [%.2f, %.2f, %.2f]%n", dark[0], dark[1], dark[2]);
+        System.out.printf("Light: [%.2f, %.2f, %.2f]%n", light[0], light[1], light[2]);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("duotone");
+        if (setter instanceof DuotoneUniformSetter) {
+            ((DuotoneUniformSetter) setter).setDarkColor(dark);
+            ((DuotoneUniformSetter) setter).setLightColor(light);
+        }
+
+        previewCanvas.display();
     }
 
     private void showSelectiveColorBoostDialog() {
