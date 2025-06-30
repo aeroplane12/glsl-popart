@@ -3,13 +3,23 @@ package com.glsl.popart.model;
 import com.jogamp.opengl.GL2;
 
 public class TritoneUniformSetter implements ShaderUniformSetter{
+    float[] shadowColor = new float[]{0.4f, 0.0f, 0.6f};    // Purpur
+    float[] midtoneColor = new float[]{1.0f, 0.5f, 0.0f};   // Orange
+    float[] highlightColor = new float[]{1.0f, 1.0f, 0.2f}; // Gelb
+    public void setShadowColor(float[] color) {
+        this.shadowColor = color;
+    }
+
+    public void setMidtoneColor(float[] color) {
+        this.midtoneColor = color;
+    }
+
+    public void setHighlightColor(float[] color) {
+        this.highlightColor = color;
+    }
 
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
-        float[] shadowColor = new float[]{0.4f, 0.0f, 0.6f};    // Purpur
-        float[] midtoneColor = new float[]{1.0f, 0.5f, 0.0f};   // Orange
-        float[] highlightColor = new float[]{1.0f, 1.0f, 0.2f}; // Gelb
-
         int shadowLoc = gl.glGetUniformLocation(program, "shadowColor");
         int midtoneLoc = gl.glGetUniformLocation(program, "midtoneColor");
         int highlightLoc = gl.glGetUniformLocation(program, "highlightColor");

@@ -386,7 +386,27 @@ public class MainUI extends JFrame {
     }
 
     private void showTritoneDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein TritoneDialog.");
+        TritoneDialog dialog = new TritoneDialog(this);
+        dialog.setVisible(true);
+
+        float[] shadow = dialog.getShadowColor();
+        float[] midtone = dialog.getMidtoneColor();
+        float[] highlight = dialog.getHighlightColor();
+
+        System.out.println("Tritone-Farben:");
+        System.out.printf("Dark: [%.2f, %.2f, %.2f]%n", shadow[0], shadow[1], shadow[2]);
+        System.out.printf("Middle: [%.2f, %.2f, %.2f]%n", midtone[0], midtone[1], midtone[2]);
+        System.out.printf("Light: [%.2f, %.2f, %.2f]%n", highlight[0], highlight[1], highlight[2]);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("tritone");
+        if (setter instanceof TritoneUniformSetter) {
+            TritoneUniformSetter tritoneSetter = (TritoneUniformSetter) setter;
+            tritoneSetter.setShadowColor(shadow);
+            tritoneSetter.setMidtoneColor(midtone);
+            tritoneSetter.setHighlightColor(highlight);
+        }
+
+        previewCanvas.display();
     }
 
     private void showOutOfRegisterPrintDialog() {
