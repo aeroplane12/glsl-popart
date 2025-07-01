@@ -456,7 +456,19 @@ public class MainUI extends JFrame {
     }
 
     private void showDistortionDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein DistortionDialog.");
+        DistortionDialog dialog = new DistortionDialog(this);
+        dialog.setVisible(true);
+        float amp = dialog.getAmplitude();
+        float freq = dialog.getFrequency();
+        System.out.printf("Setze Distortion → Amplitude: %.2f, Frequency: %.2f%n", amp, freq);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("distortion");
+        if (setter instanceof DistortionUniformSetter) {
+            ((DistortionUniformSetter) setter).setAmplitude(amp);
+            ((DistortionUniformSetter) setter).setFrequency(freq);
+        }
+
+        previewCanvas.display();
     }
 
     private void showBloomDialog() {
