@@ -3,6 +3,16 @@ package com.glsl.popart.model;
 import com.jogamp.opengl.GL2;
 
 public class IntelligentBoldOutlinesUniformSetter implements ShaderUniformSetter{
+    private float thickness = 4.0f;
+    private float edgeThreshold = 0.7f;
+
+    public void setThickness(float thickness) {
+        this.thickness = thickness;
+    }
+
+    public void setEdgeThreshold(float edgeThreshold) {
+        this.edgeThreshold = edgeThreshold;
+    }
 
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
@@ -18,12 +28,12 @@ public class IntelligentBoldOutlinesUniformSetter implements ShaderUniformSetter
 
         // Linienbreite (Dicke der Kanten)
         if (uThicknessLoc != -1) {
-            gl.glUniform1f(uThicknessLoc, 4.0f);
+            gl.glUniform1f(uThicknessLoc, thickness);
         }
 
         // Schwellenwert für Kantenerkennung
         if (uEdgeThresholdLoc != -1) {
-            gl.glUniform1f(uEdgeThresholdLoc, 0.7f);
+            gl.glUniform1f(uEdgeThresholdLoc, edgeThreshold);
         }
     }
 

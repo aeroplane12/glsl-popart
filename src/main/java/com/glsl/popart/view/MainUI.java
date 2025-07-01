@@ -424,7 +424,20 @@ public class MainUI extends JFrame {
     }
 
     private void showIntelligentBoldOutlinesDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein IntelligentBoldOutlinesDialog.");
+        IntelligentBoldOutlinesDialog dialog = new IntelligentBoldOutlinesDialog(this);
+        dialog.setVisible(true);
+        float thickness = dialog.getThickness();
+        float edgeThreshold = dialog.getEdgeThreshold();
+        System.out.printf("IntelligentBoldOutlines → Thickness: %.2f, EdgeThreshold: %.2f%n",
+                thickness, edgeThreshold);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("IntelligentBoldOutlines");
+        if (setter instanceof IntelligentBoldOutlinesUniformSetter) {
+            ((IntelligentBoldOutlinesUniformSetter) setter).setThickness(thickness);
+            ((IntelligentBoldOutlinesUniformSetter) setter).setEdgeThreshold(edgeThreshold);
+        }
+
+        previewCanvas.display();
     }
 
     private void showSerialityDialog() {
