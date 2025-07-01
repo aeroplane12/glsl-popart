@@ -441,7 +441,18 @@ public class MainUI extends JFrame {
     }
 
     private void showSerialityDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein SerialityDialog.");
+        SerialityDialog dialog = new SerialityDialog(this);
+        dialog.setVisible(true);
+        float repeatX = dialog.getRepeatX();
+        float repeatY = dialog.getRepeatY();
+        System.out.printf("Setze Seriality-Wiederholung: X=%.1f, Y=%.1f%n", repeatX, repeatY);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("seriality");
+        if (setter instanceof SerialityUniformSetter) {
+            ((SerialityUniformSetter) setter).setRepeat(repeatX, repeatY);
+        }
+
+        previewCanvas.display();
     }
 
     private void showDistortionDialog() {
