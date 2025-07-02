@@ -8,6 +8,14 @@ public class ChromaticWaveDistortionUniformSetter implements ShaderUniformSetter
     private float amplitude = 0.05f;
     private float frequency = 12.0f;  // Anzahl Wellen
 
+    public void setAmplitude(float amplitude) {
+        this.amplitude = amplitude;
+    }
+
+    public void setFrequency(float frequency) {
+        this.frequency = frequency;
+    }
+
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
         int timeLoc = gl.glGetUniformLocation(program, "u_time");

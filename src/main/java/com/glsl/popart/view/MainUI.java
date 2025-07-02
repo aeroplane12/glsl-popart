@@ -535,7 +535,20 @@ public class MainUI extends JFrame {
     }
 
     private void showChromaticWaveDistortionDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein ChromaticWaveDistortionDialog.");
+        ChromaticWaveDistortionDialog dialog = new ChromaticWaveDistortionDialog(this);
+        dialog.setVisible(true);
+        if (!dialog.isConfirmed()) return;
+        float amplitude = dialog.getAmplitude();
+        float frequency = dialog.getFrequency();
+        System.out.printf("Setze ChromaticWaveDistortion → Amplitude: %.2f, Frequency: %.2f%n", amplitude, frequency);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("chromaticwavedistortion");
+        if (setter instanceof ChromaticWaveDistortionUniformSetter) {
+            ((ChromaticWaveDistortionUniformSetter) setter).setAmplitude(amplitude);
+            ((ChromaticWaveDistortionUniformSetter) setter).setFrequency(frequency);
+        }
+
+        previewCanvas.display();
     }
 
     private void showScanlineDialog() {
