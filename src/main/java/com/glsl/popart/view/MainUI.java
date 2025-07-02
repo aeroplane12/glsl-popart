@@ -472,7 +472,20 @@ public class MainUI extends JFrame {
     }
 
     private void showBloomDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein BloomDialog.");
+        BloomDialog dialog = new BloomDialog(this);
+        dialog.setVisible(true);
+        if (!dialog.isConfirmed()) return;
+        float threshold = dialog.getThreshold();
+        float intensity = dialog.getIntensity();
+        System.out.printf("Bloom → Threshold: %.2f, Intensity: %.2f%n", threshold, intensity);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("bloom");
+        if (setter instanceof BloomUniformSetter) {
+            ((BloomUniformSetter) setter).setThreshold(threshold);
+            ((BloomUniformSetter) setter).setIntensity(intensity);
+        }
+
+        previewCanvas.display();
     }
 
     private void showChromaticAberrationDialog() {
