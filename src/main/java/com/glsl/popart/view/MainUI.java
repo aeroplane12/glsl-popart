@@ -518,7 +518,20 @@ public class MainUI extends JFrame {
     }
 
     private void showVignetteDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein VignetteDialog.");
+        VignetteDialog dialog = new VignetteDialog(this);
+        dialog.setVisible(true);
+        if (!dialog.isConfirmed()) return;
+        float radius = dialog.getRadius();
+        float softness = dialog.getSoftness();
+        System.out.printf("Setze Vignette → Radius: %.2f, Softness: %.2f%n", radius, softness);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("vignette");
+        if (setter instanceof VignetteUniformSetter) {
+            ((VignetteUniformSetter) setter).setRadius(radius);
+            ((VignetteUniformSetter) setter).setSoftness(softness);
+        }
+
+        previewCanvas.display();
     }
 
     private void showChromaticWaveDistortionDialog() {
