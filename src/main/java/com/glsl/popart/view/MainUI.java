@@ -489,7 +489,18 @@ public class MainUI extends JFrame {
     }
 
     private void showChromaticAberrationDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein ChromaticAberrationDialog.");
+        ChromaticAberrationDialog dialog = new ChromaticAberrationDialog(this);
+        dialog.setVisible(true);
+        if (!dialog.isConfirmed()) return;
+        float offset = dialog.getOffset();
+        System.out.printf("Setze ChromaticAberration Offset auf: %.4f%n", offset);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("chromaticaberration");
+        if (setter instanceof ChromaticAberrationUniformSetter) {
+            ((ChromaticAberrationUniformSetter) setter).setOffset(offset);
+        }
+
+        previewCanvas.display();
     }
 
     private void showNoiseDialog() {
