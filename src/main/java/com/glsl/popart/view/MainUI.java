@@ -504,7 +504,17 @@ public class MainUI extends JFrame {
     }
 
     private void showNoiseDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein NoiseDialog.");
+        NoiseDialog dialog = new NoiseDialog(this);
+        dialog.setVisible(true);
+        float strength = dialog.getNoiseStrength();
+        System.out.printf("Setze Noise-Stärke auf: %.2f%n", strength);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("noise");
+        if (setter instanceof NoiseUniformSetter) {
+            ((NoiseUniformSetter) setter).setStrength(strength);
+        }
+
+        previewCanvas.display();
     }
 
     private void showVignetteDialog() {
