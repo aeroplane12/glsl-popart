@@ -9,6 +9,18 @@ public class WaterRippleUniformSetter implements ShaderUniformSetter {
     private float frequency = 30.0f;  // Anzahl Wellen
     private float speed = 2.0f;       // Animationsgeschwindigkeit
 
+    public void setAmplitude(float amplitude) {
+        this.amplitude = amplitude;
+    }
+
+    public void setFrequency(float frequency) {
+        this.frequency = frequency;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
         // Hole Uniform-Locations

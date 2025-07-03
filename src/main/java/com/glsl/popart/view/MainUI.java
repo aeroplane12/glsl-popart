@@ -566,7 +566,21 @@ public class MainUI extends JFrame {
     }
 
     private void showWaterRippleDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein WaterRippleDialog.");
+        WaterRippleDialog dialog = new WaterRippleDialog(this);
+        dialog.setVisible(true);
+        float amplitude = dialog.getAmplitude();
+        float frequency = dialog.getFrequency();
+        float speed = dialog.getSpeed();
+        System.out.printf("Setze WaterRipple → Amplitude: %.2f, Frequency: %.2f%n, Speed: %.2f%n", amplitude, frequency, speed);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("waterripple");
+        if (setter instanceof WaterRippleUniformSetter) {
+            ((WaterRippleUniformSetter) setter).setAmplitude(amplitude);
+            ((WaterRippleUniformSetter) setter).setFrequency(frequency);
+            ((WaterRippleUniformSetter) setter).setSpeed(speed);
+        }
+
+        previewCanvas.display();
     }
 
     private void showHeatDistortionDialog() {
