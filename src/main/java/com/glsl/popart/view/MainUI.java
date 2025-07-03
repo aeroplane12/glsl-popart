@@ -571,7 +571,7 @@ public class MainUI extends JFrame {
         float amplitude = dialog.getAmplitude();
         float frequency = dialog.getFrequency();
         float speed = dialog.getSpeed();
-        System.out.printf("Setze WaterRipple → Amplitude: %.2f, Frequency: %.2f%n, Speed: %.2f%n", amplitude, frequency, speed);
+        System.out.printf("Setze WaterRipple → Amplitude: %.2f, Frequency: %.2f, Speed: %.2f%n", amplitude, frequency, speed);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("waterripple");
         if (setter instanceof WaterRippleUniformSetter) {
@@ -584,7 +584,19 @@ public class MainUI extends JFrame {
     }
 
     private void showHeatDistortionDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein HeatDistortionDialog.");
+        HeatDistortionDialog dialog = new HeatDistortionDialog(this);
+        dialog.setVisible(true);
+        float strength = dialog.getStrength();
+        float frequency = dialog.getFrequency();
+        System.out.printf("Setze HeatDistortion → Strength: %.2f, Frequency: %.2f%n ", strength, frequency);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("heatdistortion");
+        if (setter instanceof HeatDistortionUniformSetter) {
+            ((HeatDistortionUniformSetter) setter).setStrength(strength);
+            ((HeatDistortionUniformSetter) setter).setFrequency(frequency);
+        }
+
+        previewCanvas.display();
     }
 
     private void showRefractionDialog() {

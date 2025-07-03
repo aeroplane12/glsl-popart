@@ -8,6 +8,14 @@ public class HeatDistortionUniformSetter implements ShaderUniformSetter {
     private float strength = 0.02f;
     private float frequency = 10.0f;
 
+    public void setStrength(float strength) {
+        this.strength = strength;
+    }
+
+    public void setFrequency(float frequency) {
+        this.frequency = frequency;
+    }
+
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
         int timeLoc = gl.glGetUniformLocation(program, "u_time");
