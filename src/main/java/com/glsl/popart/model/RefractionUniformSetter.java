@@ -6,6 +6,11 @@ public class RefractionUniformSetter implements ShaderUniformSetter {
 
     private float refractionStrength = 1.0f;
 
+    public void setRefractionStrength(float refractionStrength) {
+        this.refractionStrength = refractionStrength;
+    }
+
+
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
         int refractionStrengthLoc = gl.glGetUniformLocation(program, "u_refractionStrength");

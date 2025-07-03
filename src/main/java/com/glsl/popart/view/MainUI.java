@@ -600,7 +600,17 @@ public class MainUI extends JFrame {
     }
 
     private void showRefractionDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein RefractionDialog.");
+        RefractionDialog dialog = new RefractionDialog(this);
+        dialog.setVisible(true);
+        float strength = dialog.getRefractionStrength();
+        System.out.println("Setze Refraction-Uniform-Strength auf: " + strength);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("refraction");
+        if (setter instanceof RefractionUniformSetter) {
+            ((RefractionUniformSetter) setter).setRefractionStrength(strength);
+        }
+
+        previewCanvas.display();
     }
 
     public static void main(String[] args) {
