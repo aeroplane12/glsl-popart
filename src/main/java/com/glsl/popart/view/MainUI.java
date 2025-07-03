@@ -552,7 +552,17 @@ public class MainUI extends JFrame {
     }
 
     private void showScanlineDialog() {
-        JOptionPane.showMessageDialog(this, "Hier kommt dein ScanlineDialog.");
+        ScanlineDialog dialog = new ScanlineDialog(this);
+        dialog.setVisible(true);
+        float width = dialog.getScanlineWidth();
+        System.out.println("Setze Scanline-Uniform-Width auf: " + width);
+
+        ShaderUniformSetter setter = shaderPipeline.getUniformSetter("scanline");
+        if (setter instanceof ScanlineUniformSetter) {
+            ((ScanlineUniformSetter) setter).setScanlineWidth(width);
+        }
+
+        previewCanvas.display();
     }
 
     private void showWaterRippleDialog() {

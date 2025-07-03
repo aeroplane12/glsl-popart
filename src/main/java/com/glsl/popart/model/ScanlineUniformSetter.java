@@ -3,8 +3,11 @@ package com.glsl.popart.model;
 import com.jogamp.opengl.GL2;
 
 public class ScanlineUniformSetter implements ShaderUniformSetter  {
+    private float scanlineWidth = 4.0f;
 
-    private float scanlineWidth = 4.0f; // Du kannst das dynamisch verändern
+    public void setScanlineWidth(float width) {
+        this.scanlineWidth = width;
+    }
 
     @Override
     public void setUniforms(GL2 gl, int program, int width, int height) {
