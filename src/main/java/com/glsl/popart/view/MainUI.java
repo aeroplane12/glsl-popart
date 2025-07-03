@@ -121,9 +121,13 @@ public class MainUI extends JFrame {
         JButton editParamsButton = new JButton("Parameter");
         editParamsButton.addActionListener(e -> onEditParameters());
 
+        JButton resetButton = new JButton("Alle Effekte zurücksetzen");
+        resetButton.addActionListener(e -> resetAllEffects());
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(loadTextureButton);
         bottomPanel.add(editParamsButton);
+        bottomPanel.add(resetButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -215,6 +219,17 @@ public class MainUI extends JFrame {
         for (String effectName : activeShaders) {
             showParameterDialog(effectName);
         }
+    }
+
+    private void resetAllEffects() {
+        activeShaders.clear();
+        shaderPipeline.clearShaders();
+        popArtEffectsList.clearSelection();
+        physicalEffectsList.clearSelection();
+        popArtEffectsList.repaint();
+        physicalEffectsList.repaint();
+        previewCanvas.display();
+        System.out.println("Alle Effekte wurden deaktiviert.");
     }
 
     private void showParameterDialog(String effectName) {
