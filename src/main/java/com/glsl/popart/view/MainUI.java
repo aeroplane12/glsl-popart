@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -124,10 +126,14 @@ public class MainUI extends JFrame {
         JButton resetButton = new JButton("Alle Effekte zurücksetzen");
         resetButton.addActionListener(e -> resetAllEffects());
 
+        JButton saveButton = new JButton("Textur speichern");
+        saveButton.addActionListener(e -> saveImage());
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(loadTextureButton);
         bottomPanel.add(editParamsButton);
         bottomPanel.add(resetButton);
+        bottomPanel.add(saveButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -230,6 +236,55 @@ public class MainUI extends JFrame {
         physicalEffectsList.repaint();
         previewCanvas.display();
         System.out.println("Alle Effekte wurden deaktiviert.");
+    }
+
+    private void saveImage() {
+        previewCanvas.invoke(true, drawable -> {
+            GL2 gl = drawable.getGL().getGL2();
+
+            int width = canvasWidth;
+            int height = canvasHeight;
+
+            // Sicherstellen, dass keine Alignment-Probleme auftreten
+            gl.glPixelStorei(GL2.GL_PACK_ALIGNMENT, 1);
+
+            // ByteBuffer korrekt anlegen
+            ByteBuffer buffer = ByteBuffer.allocate(width * height * 3);
+            gl.glReadPixels(0, 0, width, height, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buffer);
+
+            // Bild erzeugen
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int i = ((height - y - 1) * width + x) * 3;
+                    int r = buffer.get(i) & 0xFF;
+                    int g = buffer.get(i + 1) & 0xFF;
+                    int b = buffer.get(i + 2) & 0xFF;
+                    int rgb = (r << 16) | (g << 8) | b;
+                    image.setRGB(x, y, rgb);
+                }
+            }
+
+            // Zeitstempel im Dateinamen
+            String timestamp = java.time.LocalDateTime.now()
+                    .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+            String defaultFileName = "output_" + timestamp + ".png";
+
+            try {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setSelectedFile(new java.io.File(defaultFileName));
+                int result = chooser.showSaveDialog(this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    javax.imageio.ImageIO.write(image, "png", chooser.getSelectedFile());
+                    JOptionPane.showMessageDialog(this, "Bild gespeichert:\n" + chooser.getSelectedFile().getName());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Fehler beim Speichern:\n" + ex.getMessage());
+            }
+
+            return true;
+        });
     }
 
     private void showParameterDialog(String effectName) {
