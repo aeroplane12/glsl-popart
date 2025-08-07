@@ -19,12 +19,12 @@ public class ScanlineDialog extends JDialog {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPanel.add(new JLabel("Scanline Breite:"), BorderLayout.NORTH);
+        contentPanel.add(new JLabel("Scanline Anzahl:"), BorderLayout.NORTH);
         contentPanel.add(widthSlider, BorderLayout.CENTER);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            System.out.println("Scanline-Breite gesetzt auf: " + getScanlineWidth());
+            System.out.println("Scanline-Anzahl gesetzt auf: " + getScanlineWidth());
             dispose();
         });
 

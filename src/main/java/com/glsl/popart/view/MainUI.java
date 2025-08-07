@@ -625,7 +625,7 @@ public class MainUI extends JFrame {
         ScanlineDialog dialog = new ScanlineDialog(this);
         dialog.setVisible(true);
         float width = dialog.getScanlineWidth();
-        System.out.println("Setze Scanline-Uniform-Width auf: " + width);
+        System.out.println("Setze Scanline Anzahl auf: " + width);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("scanline");
         if (setter instanceof ScanlineUniformSetter) {
