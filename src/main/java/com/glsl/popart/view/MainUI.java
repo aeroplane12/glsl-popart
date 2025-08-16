@@ -117,16 +117,16 @@ public class MainUI extends JFrame {
         add(mainSplit, BorderLayout.CENTER);
 
         // Button unten
-        JButton loadTextureButton = new JButton("Textur hochladen");
+        JButton loadTextureButton = new JButton("Load Texture");
         loadTextureButton.addActionListener(e -> onLoadTexture());
 
-        JButton editParamsButton = new JButton("Parameter");
+        JButton editParamsButton = new JButton("Parameters");
         editParamsButton.addActionListener(e -> onEditParameters());
 
-        JButton resetButton = new JButton("Alle Effekte zurücksetzen");
+        JButton resetButton = new JButton("Reset All Effects");
         resetButton.addActionListener(e -> resetAllEffects());
 
-        JButton saveButton = new JButton("Textur speichern");
+        JButton saveButton = new JButton("Save Image");
         saveButton.addActionListener(e -> saveImage());
 
         JPanel bottomPanel = new JPanel();
