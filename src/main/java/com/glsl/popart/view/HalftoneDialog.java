@@ -19,13 +19,13 @@ public class HalftoneDialog extends JDialog {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPanel.add(new JLabel("Punktgröße:"), BorderLayout.NORTH);
+        contentPanel.add(new JLabel("Dot Size:"), BorderLayout.NORTH);
         contentPanel.add(dotSizeSlider, BorderLayout.CENTER);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             int value = dotSizeSlider.getValue();
-            System.out.println("Halftone dotSize gesetzt auf: " + value);
+            System.out.println("Set Halftone Dot Size: " + value);
             dispose();
         });
 

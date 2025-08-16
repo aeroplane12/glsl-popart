@@ -9,7 +9,7 @@ public class BloomDialog extends JDialog {
     private boolean confirmed = false;
 
     public BloomDialog(JFrame parent) {
-        super(parent, "Bloom-Einstellungen", true);
+        super(parent, "Bloom Settings", true);
         setLayout(new GridLayout(3, 2));
         setSize(300, 150);
         setLocationRelativeTo(parent);
@@ -27,7 +27,7 @@ public class BloomDialog extends JDialog {
             confirmed = true;
             setVisible(false);
         });
-        JButton cancel = new JButton("Abbrechen");
+        JButton cancel = new JButton("Cancel");
         cancel.addActionListener(e -> setVisible(false));
 
         add(ok);

@@ -14,7 +14,7 @@ public class TritoneDialog extends JDialog {
     private float[] highlightColor;
 
     public TritoneDialog(Frame parent) {
-        super(parent, "Tritone Farben", true);
+        super(parent, "Tritone Colors", true);
         setLayout(new BorderLayout());
         setSize(700, 600);
         setLocationRelativeTo(parent);
@@ -24,9 +24,9 @@ public class TritoneDialog extends JDialog {
         highlightColorChooser = new JColorChooser(Color.YELLOW);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Schatten", shadowColorChooser);
-        tabs.addTab("Mitteltöne", midtoneColorChooser);
-        tabs.addTab("Lichter", highlightColorChooser);
+        tabs.addTab("Shadow", shadowColorChooser);
+        tabs.addTab("MidTone", midtoneColorChooser);
+        tabs.addTab("HighLight", highlightColorChooser);
 
         add(tabs, BorderLayout.CENTER);
 

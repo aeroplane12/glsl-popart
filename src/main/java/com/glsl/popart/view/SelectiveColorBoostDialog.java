@@ -28,11 +28,11 @@ public class SelectiveColorBoostDialog extends JDialog {
         boostSlider.setPaintLabels(true);
 
         // Color Chooser Button
-        colorButton = new JButton("Ziel-Farbe wählen");
+        colorButton = new JButton("Select target color");
         colorButton.setBackground(selectedColor);
         colorButton.setForeground(Color.WHITE);
         colorButton.addActionListener(e -> {
-            Color color = JColorChooser.showDialog(this, "Ziel-Farbe auswählen", selectedColor);
+            Color color = JColorChooser.showDialog(this, "Select target color", selectedColor);
             if (color != null) {
                 selectedColor = color;
                 colorButton.setBackground(selectedColor);
@@ -42,9 +42,9 @@ public class SelectiveColorBoostDialog extends JDialog {
         // UI Layout
         JPanel contentPanel = new JPanel(new GridLayout(5, 1, 5, 5));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPanel.add(new JLabel("Farb-Schwelle (Threshold):"));
+        contentPanel.add(new JLabel("Threshold:"));
         contentPanel.add(thresholdSlider);
-        contentPanel.add(new JLabel("Verstärkung (Boost Amount):"));
+        contentPanel.add(new JLabel("Boost Amount:"));
         contentPanel.add(boostSlider);
         contentPanel.add(colorButton);
 

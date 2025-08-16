@@ -24,7 +24,7 @@ public class RefractionDialog extends JDialog {
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
-            System.out.println("Refraction Strength gesetzt auf: " + getRefractionStrength());
+            System.out.println("Set Refraction Strength: " + getRefractionStrength());
             dispose();
         });
 

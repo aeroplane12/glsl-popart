@@ -21,13 +21,13 @@ public class NoiseDialog extends JDialog {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPanel.add(new JLabel("Noise-Stärke:"), BorderLayout.NORTH);
+        contentPanel.add(new JLabel("Noise Strength:"), BorderLayout.NORTH);
         contentPanel.add(noiseSlider, BorderLayout.CENTER);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             int value = noiseSlider.getValue();
-            System.out.println("Noise-Level gesetzt auf: " + value);
+            System.out.println("Set Noise Level: " + value);
             dispose();
         });
 

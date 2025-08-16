@@ -20,13 +20,13 @@ public class ComicLookDialog extends JDialog {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPanel.add(new JLabel("Farbanzahl:"), BorderLayout.NORTH);
+        contentPanel.add(new JLabel("Color Level:"), BorderLayout.NORTH);
         contentPanel.add(levelSlider, BorderLayout.CENTER);
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             int value = levelSlider.getValue();
-            System.out.println("ComicLook-Level gesetzt auf: " + value);
+            System.out.println("Set ComicLook uniform level to: " + value);
             dispose();
         });
 

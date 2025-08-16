@@ -11,7 +11,7 @@ public class DuotoneDialog extends JDialog {
     private final JButton lightColorButton;
 
     public DuotoneDialog(JFrame parent) {
-        super(parent, "Duotone Farben", true);
+        super(parent, "Duotone Colors", true);
         setLayout(new BorderLayout());
         setSize(300, 200);
         setLocationRelativeTo(parent);
@@ -22,7 +22,7 @@ public class DuotoneDialog extends JDialog {
         darkColorButton = new JButton();
         darkColorButton.setBackground(darkColor);
         darkColorButton.addActionListener(e -> {
-            Color selected = JColorChooser.showDialog(this, "Dunkle Farbe wählen", darkColor);
+            Color selected = JColorChooser.showDialog(this, "Select dark color", darkColor);
             if (selected != null) {
                 darkColor = selected;
                 darkColorButton.setBackground(darkColor);
@@ -32,16 +32,16 @@ public class DuotoneDialog extends JDialog {
         lightColorButton = new JButton();
         lightColorButton.setBackground(lightColor);
         lightColorButton.addActionListener(e -> {
-            Color selected = JColorChooser.showDialog(this, "Helle Farbe wählen", lightColor);
+            Color selected = JColorChooser.showDialog(this, "Select light color", lightColor);
             if (selected != null) {
                 lightColor = selected;
                 lightColorButton.setBackground(lightColor);
             }
         });
 
-        colorPanel.add(new JLabel("Dunkle Farbe:"));
+        colorPanel.add(new JLabel("Dark Color:"));
         colorPanel.add(darkColorButton);
-        colorPanel.add(new JLabel("Helle Farbe:"));
+        colorPanel.add(new JLabel("Light Color:"));
         colorPanel.add(lightColorButton);
 
         JButton okButton = new JButton("OK");

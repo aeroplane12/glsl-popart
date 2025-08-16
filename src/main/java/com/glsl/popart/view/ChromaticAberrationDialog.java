@@ -23,7 +23,7 @@ public class ChromaticAberrationDialog extends JDialog {
         sliderPanel.add(offsetSlider);
 
         JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Abbrechen");
+        JButton cancelButton = new JButton("Cancel");
 
         okButton.addActionListener(e -> {
             confirmed = true;

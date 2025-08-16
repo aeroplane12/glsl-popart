@@ -23,7 +23,7 @@ public class VignetteDialog extends JDialog {
 
         JPanel buttonPanel = new JPanel();
         JButton ok = new JButton("OK");
-        JButton cancel = new JButton("Abbrechen");
+        JButton cancel = new JButton("Cancel");
 
         ok.addActionListener(e -> {
             confirmed = true;

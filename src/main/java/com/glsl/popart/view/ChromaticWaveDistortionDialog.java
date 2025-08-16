@@ -28,7 +28,7 @@ public class ChromaticWaveDistortionDialog extends JDialog {
         });
         add(ok);
 
-        JButton cancel = new JButton("Abbrechen");
+        JButton cancel = new JButton("Cancel");
         cancel.addActionListener(e -> setVisible(false));
         add(cancel);
 
