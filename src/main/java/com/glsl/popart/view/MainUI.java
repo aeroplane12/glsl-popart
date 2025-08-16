@@ -148,8 +148,8 @@ public class MainUI extends JFrame {
 
         String selected = (String) JOptionPane.showInputDialog(
                 this,
-                "Wähle eine Textur aus:",
-                "Textur auswählen",
+                "Select a texture:",
+                "Choose Texture",
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 availableTextures,
@@ -174,7 +174,7 @@ public class MainUI extends JFrame {
                     ex.printStackTrace();
                     SwingUtilities.invokeLater(() -> {
                         JOptionPane.showMessageDialog(this,
-                                "Fehler beim Laden der Textur:\n" + ex.getMessage());
+                                "Error loading texture:\n" + ex.getMessage());
                     });
                 }
                 return true;
@@ -235,7 +235,7 @@ public class MainUI extends JFrame {
         popArtEffectsList.repaint();
         physicalEffectsList.repaint();
         previewCanvas.display();
-        System.out.println("Alle Effekte wurden deaktiviert.");
+        System.out.println("All effects have been disabled.");
     }
 
     private void saveImage() {
@@ -276,11 +276,11 @@ public class MainUI extends JFrame {
                 int result = chooser.showSaveDialog(this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     javax.imageio.ImageIO.write(image, "png", chooser.getSelectedFile());
-                    JOptionPane.showMessageDialog(this, "Bild gespeichert:\n" + chooser.getSelectedFile().getName());
+                    JOptionPane.showMessageDialog(this, "Image saved:\n" + chooser.getSelectedFile().getName());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Fehler beim Speichern:\n" + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error when saving:\n" + ex.getMessage());
             }
 
             return true;
@@ -351,7 +351,7 @@ public class MainUI extends JFrame {
                 break;
             default:
                 JOptionPane.showMessageDialog(this,
-                        "Kein Parameterdialog für: " + effectName);
+                        "No parameter dialog for: " + effectName);
                 break;
         }
     }
@@ -360,7 +360,7 @@ public class MainUI extends JFrame {
         PosterizationDialog dialog = new PosterizationDialog(this);
         dialog.setVisible(true);
         int level = dialog.getPosterizationLevel();
-        System.out.println("Setze Posterization-Uniform-Level auf: " + level);
+        System.out.println("Set Posterization Uniform Level to: " + level);
 
         // UniformSetter abrufen und neuen Level setzen
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("posterization");
@@ -376,7 +376,7 @@ public class MainUI extends JFrame {
         HalftoneDialog dialog = new HalftoneDialog(this);
         dialog.setVisible(true);
         int dotSize = dialog.getDotSize();
-        System.out.println("Setze Halftone dotSize Uniform auf: " + dotSize);
+        System.out.println("Set Halftone dotSize Uniform to: " + dotSize);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("halftone");
         if (setter instanceof HalftoneUniformSetter) {
@@ -390,7 +390,7 @@ public class MainUI extends JFrame {
         ComicLookDialog dialog = new ComicLookDialog(this);
         dialog.setVisible(true);
         int levels = dialog.getLevels();
-        System.out.println("Setze ComicLook-Uniform-Level auf: " + levels);
+        System.out.println("Set ComicLook uniform level to: " + levels);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("comiclook");
         if (setter instanceof ComicLookUniformSetter) {
@@ -407,7 +407,7 @@ public class MainUI extends JFrame {
         float[] dark = dialog.getDarkColor();
         float[] light = dialog.getLightColor();
 
-        System.out.println("Setze Duotone-Farben:");
+        System.out.println("Set duotone colors:");
         System.out.printf("Dark:  [%.2f, %.2f, %.2f]%n", dark[0], dark[1], dark[2]);
         System.out.printf("Light: [%.2f, %.2f, %.2f]%n", light[0], light[1], light[2]);
 
@@ -445,7 +445,7 @@ public class MainUI extends JFrame {
         BenDayDotsDialog dialog = new BenDayDotsDialog(this);
         dialog.setVisible(true);
         int dotSize = dialog.getDotSize();
-        System.out.println("Setze BenDayDots dotSize auf: " + dotSize);
+        System.out.println("Set BenDayDots dotSize to: " + dotSize);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("bendaydots");
         if (setter instanceof BenDayDotsUniformSetter) {
@@ -463,7 +463,7 @@ public class MainUI extends JFrame {
         float[] midtone = dialog.getMidtoneColor();
         float[] highlight = dialog.getHighlightColor();
 
-        System.out.println("Tritone-Farben:");
+        System.out.println("Tritone colors:");
         System.out.printf("Dark: [%.2f, %.2f, %.2f]%n", shadow[0], shadow[1], shadow[2]);
         System.out.printf("Middle: [%.2f, %.2f, %.2f]%n", midtone[0], midtone[1], midtone[2]);
         System.out.printf("Light: [%.2f, %.2f, %.2f]%n", highlight[0], highlight[1], highlight[2]);
@@ -483,7 +483,7 @@ public class MainUI extends JFrame {
         OutOfRegisterPrintShaderDialog dialog = new OutOfRegisterPrintShaderDialog(this);
         dialog.setVisible(true);
         float offset = dialog.getSelectedOffset();
-        System.out.println("Setze OutOfRegisterPrint-Offset auf: " + offset);
+        System.out.println("Set OutOfRegisterPrint offset to: " + offset);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("OutOfRegisterPrintShader");
         if (setter instanceof OutOfRegisterPrintShaderUniformSetter) {
@@ -515,7 +515,7 @@ public class MainUI extends JFrame {
         dialog.setVisible(true);
         float repeatX = dialog.getRepeatX();
         float repeatY = dialog.getRepeatY();
-        System.out.printf("Setze Seriality-Wiederholung: X=%.1f, Y=%.1f%n", repeatX, repeatY);
+        System.out.printf("Set seriality repetition: X=%.1f, Y=%.1f%n", repeatX, repeatY);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("seriality");
         if (setter instanceof SerialityUniformSetter) {
@@ -530,7 +530,7 @@ public class MainUI extends JFrame {
         dialog.setVisible(true);
         float amp = dialog.getAmplitude();
         float freq = dialog.getFrequency();
-        System.out.printf("Setze Distortion → Amplitude: %.2f, Frequency: %.2f%n", amp, freq);
+        System.out.printf("Set Distortion → Amplitude: %.2f, Frequency: %.2f%n", amp, freq);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("distortion");
         if (setter instanceof DistortionUniformSetter) {
@@ -563,7 +563,7 @@ public class MainUI extends JFrame {
         dialog.setVisible(true);
         if (!dialog.isConfirmed()) return;
         float offset = dialog.getOffset();
-        System.out.printf("Setze ChromaticAberration Offset auf: %.4f%n", offset);
+        System.out.printf("Set ChromaticAberration Offset: %.4f%n", offset);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("chromaticaberration");
         if (setter instanceof ChromaticAberrationUniformSetter) {
@@ -577,7 +577,7 @@ public class MainUI extends JFrame {
         NoiseDialog dialog = new NoiseDialog(this);
         dialog.setVisible(true);
         float strength = dialog.getNoiseStrength();
-        System.out.printf("Setze Noise-Stärke auf: %.2f%n", strength);
+        System.out.printf("Set noise intensity: %.2f%n", strength);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("noise");
         if (setter instanceof NoiseUniformSetter) {
@@ -593,7 +593,7 @@ public class MainUI extends JFrame {
         if (!dialog.isConfirmed()) return;
         float radius = dialog.getRadius();
         float softness = dialog.getSoftness();
-        System.out.printf("Setze Vignette → Radius: %.2f, Softness: %.2f%n", radius, softness);
+        System.out.printf("Set Vignette → Radius: %.2f, Softness: %.2f%n", radius, softness);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("vignette");
         if (setter instanceof VignetteUniformSetter) {
@@ -610,7 +610,7 @@ public class MainUI extends JFrame {
         if (!dialog.isConfirmed()) return;
         float amplitude = dialog.getAmplitude();
         float frequency = dialog.getFrequency();
-        System.out.printf("Setze ChromaticWaveDistortion → Amplitude: %.2f, Frequency: %.2f%n", amplitude, frequency);
+        System.out.printf("Set ChromaticWaveDistortion → Amplitude: %.2f, Frequency: %.2f%n", amplitude, frequency);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("chromaticwavedistortion");
         if (setter instanceof ChromaticWaveDistortionUniformSetter) {
@@ -625,7 +625,7 @@ public class MainUI extends JFrame {
         ScanlineDialog dialog = new ScanlineDialog(this);
         dialog.setVisible(true);
         float width = dialog.getScanlineWidth();
-        System.out.println("Setze Scanline Anzahl auf: " + width);
+        System.out.println("Set scanline count: " + width);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("scanline");
         if (setter instanceof ScanlineUniformSetter) {
@@ -641,7 +641,7 @@ public class MainUI extends JFrame {
         float amplitude = dialog.getAmplitude();
         float frequency = dialog.getFrequency();
         float speed = dialog.getSpeed();
-        System.out.printf("Setze WaterRipple → Amplitude: %.2f, Frequency: %.2f, Speed: %.2f%n", amplitude, frequency, speed);
+        System.out.printf("Set WaterRipple → Amplitude: %.2f, Frequency: %.2f, Speed: %.2f%n", amplitude, frequency, speed);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("waterripple");
         if (setter instanceof WaterRippleUniformSetter) {
@@ -658,7 +658,7 @@ public class MainUI extends JFrame {
         dialog.setVisible(true);
         float strength = dialog.getStrength();
         float frequency = dialog.getFrequency();
-        System.out.printf("Setze HeatDistortion → Strength: %.2f, Frequency: %.2f%n ", strength, frequency);
+        System.out.printf("Set HeatDistortion → Strength: %.2f, Frequency: %.2f%n ", strength, frequency);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("heatdistortion");
         if (setter instanceof HeatDistortionUniformSetter) {
@@ -673,7 +673,7 @@ public class MainUI extends JFrame {
         RefractionDialog dialog = new RefractionDialog(this);
         dialog.setVisible(true);
         float strength = dialog.getRefractionStrength();
-        System.out.println("Setze Refraction-Uniform-Strength auf: " + strength);
+        System.out.println("Set Refraction Uniform Strength: " + strength);
 
         ShaderUniformSetter setter = shaderPipeline.getUniformSetter("refraction");
         if (setter instanceof RefractionUniformSetter) {
