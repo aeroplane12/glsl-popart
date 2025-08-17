@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MainUI extends JFrame {
@@ -29,7 +30,7 @@ public class MainUI extends JFrame {
     private PipelineManager pipelineManager;
     private int canvasWidth = 400;
     private int canvasHeight = 600;
-    private final Set<String> activeShaders = new HashSet<>();
+    private final LinkedHashSet<String> activeShaders = new LinkedHashSet<>();
 
     public MainUI() {
         setTitle("GLSL PopArt");
@@ -218,12 +219,30 @@ public class MainUI extends JFrame {
 
     private void onEditParameters() {
         if (activeShaders.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Kein Effekt aktiv.");
+            JOptionPane.showMessageDialog(this, "No effect active.");
             return;
         }
 
-        for (String effectName : activeShaders) {
-            showParameterDialog(effectName);
+        // Liste der Effekte als Array
+        String[] effectsArray = activeShaders.toArray(new String[0]);
+
+        // Letzter aktiver Effekt
+        String defaultEffect = effectsArray[effectsArray.length - 1];
+
+        // Auswahl-Dialog
+        String selectedEffect = (String) JOptionPane.showInputDialog(
+                this,
+                "Select an effect to edit:",
+                "Edit Effect Parameters",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                effectsArray,
+                defaultEffect // Standardmäßig letzter aktiver Effekt
+        );
+
+        if (selectedEffect != null) {
+            showParameterDialog(selectedEffect);
+            // Nach dem Dialog automatisch zurück zum Menü, keine weiteren Dialoge öffnen
         }
     }
 
