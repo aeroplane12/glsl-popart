@@ -242,30 +242,38 @@ public class MainUI extends JFrame {
         previewCanvas.invoke(true, drawable -> {
             GL2 gl = drawable.getGL().getGL2();
 
-            int width = canvasWidth;
-            int height = canvasHeight;
+            int canvasW = canvasWidth;
+            int canvasH = canvasHeight;
 
-            // Sicherstellen, dass keine Alignment-Probleme auftreten
+            // Originalbild aus OpenGL auslesen
             gl.glPixelStorei(GL2.GL_PACK_ALIGNMENT, 1);
+            ByteBuffer buffer = ByteBuffer.allocate(canvasW * canvasH * 3);
+            gl.glReadPixels(0, 0, canvasW, canvasH, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buffer);
 
-            // ByteBuffer korrekt anlegen
-            ByteBuffer buffer = ByteBuffer.allocate(width * height * 3);
-            gl.glReadPixels(0, 0, width, height, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buffer);
-
-            // Bild erzeugen
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int i = ((height - y - 1) * width + x) * 3;
+            BufferedImage original = new BufferedImage(canvasW, canvasH, BufferedImage.TYPE_INT_RGB);
+            for (int y = 0; y < canvasH; y++) {
+                for (int x = 0; x < canvasW; x++) {
+                    int i = ((canvasH - y - 1) * canvasW + x) * 3;
                     int r = buffer.get(i) & 0xFF;
                     int g = buffer.get(i + 1) & 0xFF;
                     int b = buffer.get(i + 2) & 0xFF;
                     int rgb = (r << 16) | (g << 8) | b;
-                    image.setRGB(x, y, rgb);
+                    original.setRGB(x, y, rgb);
                 }
             }
 
-            // Zeitstempel im Dateinamen
+            // Zielgröße 16:9 (Breite = canvasW, Höhe = Breite * 9/16)
+            int targetW = canvasW;
+            int targetH = targetW * 9 / 16;
+
+            // Bild auf 16:9 skalieren
+            Image scaled = original.getScaledInstance(targetW, targetH, Image.SCALE_SMOOTH);
+            BufferedImage output = new BufferedImage(targetW, targetH, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = output.createGraphics();
+            g2d.drawImage(scaled, 0, 0, null);
+            g2d.dispose();
+
+            // Zeitstempel
             String timestamp = java.time.LocalDateTime.now()
                     .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
             String defaultFileName = "output_" + timestamp + ".png";
@@ -275,7 +283,7 @@ public class MainUI extends JFrame {
                 chooser.setSelectedFile(new java.io.File(defaultFileName));
                 int result = chooser.showSaveDialog(this);
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    javax.imageio.ImageIO.write(image, "png", chooser.getSelectedFile());
+                    javax.imageio.ImageIO.write(output, "png", chooser.getSelectedFile());
                     JOptionPane.showMessageDialog(this, "Image saved:\n" + chooser.getSelectedFile().getName());
                 }
             } catch (Exception ex) {
