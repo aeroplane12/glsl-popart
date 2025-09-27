@@ -25,6 +25,9 @@ public class Main implements GLEventListener {
     private int height = 600;
     private final Renderer renderer = new Renderer();
     private PipelineManager pipelineManager;
+    private long totalRenderTimeNano = 0;
+    private int frameCount = 0;
+    private final int MEASUREMENT_FRAMES = 1000;
 
     public static void main(String[] args) {
         // OpenGL-Profil abrufen
@@ -85,6 +88,8 @@ public class Main implements GLEventListener {
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
 
+        long startTime = System.nanoTime();
+
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         checkGLError(gl, "glClear");
 
@@ -102,6 +107,38 @@ public class Main implements GLEventListener {
         renderer.renderTextureToScreen(gl, finalTextureId, width, height);
 
         texture.disable(gl);
+
+        long endTime = System.nanoTime();
+
+        totalRenderTimeNano += (endTime - startTime);
+        frameCount++;
+
+        if (frameCount >= MEASUREMENT_FRAMES) {
+
+            double averageTimeNano = (double) totalRenderTimeNano / frameCount;
+
+            double averageTimeMillis = averageTimeNano / 1_000_000.0;
+
+            double fps = 1_000_000_000.0 / averageTimeNano;
+
+            System.out.println("--- PERFORMANCE MESSUNG FERTIG ---");
+
+            System.out.printf("Durchschn. Renderzeit (n=%d): %.3f ms/Frame%n", MEASUREMENT_FRAMES, averageTimeMillis);
+            System.out.printf("Framerate: %.2f FPS%n", fps);
+            System.out.println("----------------------------------");
+
+            System.out.flush();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            totalRenderTimeNano = 0;
+            frameCount = 0;
+        }
+
     }
 
     // Cleanup, wenn Fenster geschlossen wird
